@@ -12,8 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Enums\" />
-      <Folder Include="Models\" />
+        <PackageReference Include="ClosedXML" Version="0.105.0" />
     </ItemGroup>
 
 </Project>
