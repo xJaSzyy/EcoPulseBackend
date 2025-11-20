@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using EcoPulseBackend.Enums;
 
 namespace EcoPulseBackend.Models;
@@ -50,6 +51,7 @@ public class ReservoirsEmissionsReport
     /// <summary>
     /// Концентрация паров нефтепродуктов в выбросах при заполнении резервуаров
     /// </summary>
+    [JsonIgnore]
     public VaporConcentrationRecord VaporConcentration { get; set; } = null!;
 
     /// <summary>
@@ -75,5 +77,6 @@ public class ReservoirsEmissionsReport
     /// <summary>
     /// Результат расчетов выбросов ЗВ от резервуаров
     /// </summary>
+    [JsonIgnore]
     public ReservoirsEmissionsBatchResult Result { get; set; } = new();
 }

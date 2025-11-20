@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace EcoPulseBackend.Models;
 
 /// <summary>
@@ -38,5 +40,6 @@ public class GasolineGeneratorEmissionsReport
     /// <summary>
     /// Список результатов расчетов выбросов ЗВ от бензогенератора
     /// </summary>
+    [JsonIgnore]
     public List<EmissionsResult> Emissions { get; set; } = new();
 }
