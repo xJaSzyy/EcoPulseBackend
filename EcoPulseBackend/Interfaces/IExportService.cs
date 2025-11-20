@@ -4,11 +4,11 @@ namespace EcoPulseBackend.Interfaces;
 
 public interface IExportService
 {
-    public MemoryStream CreateGasolineGeneratorEmissionsReport(GasolineGeneratorEmissionsReport report, string fileName);
+    public MemoryStream CreateGasolineGeneratorEmissionsReport(GasolineGeneratorEmissionsReport report);
 
-    public MemoryStream CreateReservoirsEmissionsReport(ReservoirsEmissionsReport report, string fileName);
+    public MemoryStream CreateReservoirsEmissionsReport(ReservoirsEmissionsReport report);
 
-    public MemoryStream CreateDuringMetalMachiningEmissionsReport(DuringMetalMachiningEmissionsReport report, string fileName);
+    public MemoryStream CreateDuringMetalMachiningEmissionsReport(DuringMetalMachiningEmissionsReport report);
 
-    public MemoryStream CreateDuringWeldingOperationsEmissionsReport(DuringWeldingOperationsEmissionsReport report, string fileName);
+    public MemoryStream CreateDuringWeldingOperationsEmissionsReport(DuringWeldingOperationsEmissionsReport report);
 }

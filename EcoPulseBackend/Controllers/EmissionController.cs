@@ -1,4 +1,5 @@
 using EcoPulseBackend.Enums;
+using EcoPulseBackend.Extensions;
 using EcoPulseBackend.Interfaces;
 using EcoPulseBackend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -28,8 +29,8 @@ public class EmissionController : ControllerBase
             report.WorkHoursPerDay, report.WorkDaysPerYear,
             report.GeneratorCount, report.SameGeneratorCount);
 
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
-        var stream = _exportService.CreateGasolineGeneratorEmissionsReport(report, fileName);
+        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} Бензогенератор.xlsx";
+        var stream = _exportService.CreateGasolineGeneratorEmissionsReport(report);
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
@@ -43,8 +44,8 @@ public class EmissionController : ControllerBase
             report.AutumnWinterOilAmount, report.SpringSummerOilAmount,
             report.DrainedVolume, report.AverageDrainTime);
 
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
-        var stream = _exportService.CreateReservoirsEmissionsReport(report, fileName);
+        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} Резервуары.xlsx";
+        var stream = _exportService.CreateReservoirsEmissionsReport(report);
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
@@ -54,8 +55,8 @@ public class EmissionController : ControllerBase
     {
         report.Result = _emissionService.CalculateDuringMetalMachiningEmissions(report.MetalMachiningMachineType, report.WorkDaysPerYear);
 
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
-        var stream = _exportService.CreateDuringMetalMachiningEmissionsReport(report, fileName);
+        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} {report.MetalMachiningMachineType.GetDescription()}.xlsx";
+        var stream = _exportService.CreateDuringMetalMachiningEmissionsReport(report);
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
@@ -68,8 +69,8 @@ public class EmissionController : ControllerBase
                 report.ElectrodesPerYear,
                 report.WorkDaysPerYear);
 
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
-        var stream = _exportService.CreateDuringWeldingOperationsEmissionsReport(report, fileName);
+        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} Сварочный аппарат.xlsx";
+        var stream = _exportService.CreateDuringWeldingOperationsEmissionsReport(report);
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }

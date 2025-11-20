@@ -7,10 +7,12 @@ namespace EcoPulseBackend.Services;
 
 public class ExportService : IExportService
 {
-    public MemoryStream CreateGasolineGeneratorEmissionsReport(GasolineGeneratorEmissionsReport report, string fileName)
+    public MemoryStream CreateGasolineGeneratorEmissionsReport(GasolineGeneratorEmissionsReport report)
     {
+        var sheetName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
+        
         var workbook = new XLWorkbook();
-        var worksheet = workbook.Worksheets.Add(fileName);
+        var worksheet = workbook.Worksheets.Add(sheetName);
 
         var row = 1;
         
@@ -108,10 +110,12 @@ public class ExportService : IExportService
         return stream;
     }
 
-    public MemoryStream CreateReservoirsEmissionsReport(ReservoirsEmissionsReport report, string fileName)
+    public MemoryStream CreateReservoirsEmissionsReport(ReservoirsEmissionsReport report)
     {
+        var sheetName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
+        
         var workbook = new XLWorkbook();
-        var worksheet = workbook.Worksheets.Add(fileName);
+        var worksheet = workbook.Worksheets.Add(sheetName);
 
         var row = 1;
         
@@ -234,10 +238,12 @@ public class ExportService : IExportService
         return stream;
     }
 
-    public MemoryStream CreateDuringMetalMachiningEmissionsReport(DuringMetalMachiningEmissionsReport report, string fileName)
+    public MemoryStream CreateDuringMetalMachiningEmissionsReport(DuringMetalMachiningEmissionsReport report)
     {
+        var sheetName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
+        
         var workbook = new XLWorkbook();
-        var worksheet = workbook.Worksheets.Add(fileName);
+        var worksheet = workbook.Worksheets.Add(sheetName);
 
         var row = 1;
         
@@ -302,10 +308,12 @@ public class ExportService : IExportService
         return stream;
     }
     
-    public MemoryStream CreateDuringWeldingOperationsEmissionsReport(DuringWeldingOperationsEmissionsReport report, string fileName)
+    public MemoryStream CreateDuringWeldingOperationsEmissionsReport(DuringWeldingOperationsEmissionsReport report)
     {
+        var sheetName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
+        
         var workbook = new XLWorkbook();
-        var worksheet = workbook.Worksheets.Add(fileName);
+        var worksheet = workbook.Worksheets.Add(sheetName);
 
         var row = 1;
         
