@@ -20,7 +20,7 @@ public class EmissionController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost("report/gasolineGenerator")]
+    [HttpPost("reports/gasoline-generator")]
     public IActionResult GetGasolineGeneratorReport([FromBody] GasolineGeneratorEmissionsReport report)
     {
         report.Emissions = _emissionService.CalculateGasolineGeneratorEmissionsBatch(
@@ -28,13 +28,13 @@ public class EmissionController : ControllerBase
             report.WorkHoursPerDay, report.WorkDaysPerYear,
             report.GeneratorCount, report.SameGeneratorCount);
 
-        var stream = _exportService.CreateGasolineGeneratorEmissionsReport(report);
         var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
+        var stream = _exportService.CreateGasolineGeneratorEmissionsReport(report, fileName);
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
     
-    [HttpPost("report/reservoirs")]
+    [HttpPost("reports/reservoirs")]
     public IActionResult GetReservoirsReport([FromBody] ReservoirsEmissionsReport report)
     {
         report.VaporConcentration = DataStorage.VaporConcentration[report.ReservoirType][report.ClimateZone][report.OilProduct];
@@ -43,8 +43,33 @@ public class EmissionController : ControllerBase
             report.AutumnWinterOilAmount, report.SpringSummerOilAmount,
             report.DrainedVolume, report.AverageDrainTime);
 
-        var stream = _exportService.CreateReservoirsEmissionsReport(report);
         var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
+        var stream = _exportService.CreateReservoirsEmissionsReport(report, fileName);
+
+        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
+    
+    [HttpPost("reports/during-metal-machining")]
+    public IActionResult GetDuringMetalMachiningReport([FromBody] DuringMetalMachiningEmissionsReport report)
+    {
+        report.Result = _emissionService.CalculateDuringMetalMachiningEmissions(report.MetalMachiningMachineType, report.WorkDaysPerYear);
+
+        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
+        var stream = _exportService.CreateDuringMetalMachiningEmissionsReport(report, fileName);
+
+        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
+    
+    [HttpPost("reports/during-welding-operations")]
+    public IActionResult GetDuringWeldingOperationsReport([FromBody] DuringWeldingOperationsEmissionsReport report)
+    {
+        report.Result = _emissionService.CalculateDuringWeldingOperationsEmissionsBatch(
+                new List<Pollutant> { Pollutant.Fe2O3, Pollutant.MnO2, Pollutant.FluorideGases },
+                report.ElectrodesPerYear,
+                report.WorkDaysPerYear);
+
+        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource}.xlsx";
+        var stream = _exportService.CreateDuringWeldingOperationsEmissionsReport(report, fileName);
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }

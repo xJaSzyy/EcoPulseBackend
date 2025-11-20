@@ -7,10 +7,8 @@ namespace EcoPulseBackend.Services;
 
 public class ExportService : IExportService
 {
-    public MemoryStream CreateGasolineGeneratorEmissionsReport(GasolineGeneratorEmissionsReport report)
+    public MemoryStream CreateGasolineGeneratorEmissionsReport(GasolineGeneratorEmissionsReport report, string fileName)
     {
-        var fileName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
-        
         var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add(fileName);
 
@@ -110,10 +108,8 @@ public class ExportService : IExportService
         return stream;
     }
 
-    public MemoryStream CreateReservoirsEmissionsReport(ReservoirsEmissionsReport report)
+    public MemoryStream CreateReservoirsEmissionsReport(ReservoirsEmissionsReport report, string fileName)
     {
-        var fileName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
-        
         var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add(fileName);
 
@@ -238,10 +234,8 @@ public class ExportService : IExportService
         return stream;
     }
 
-    public MemoryStream CreateDuringMetalMachiningEmissionsReport(DuringMetalMachiningEmissionsReport report)
+    public MemoryStream CreateDuringMetalMachiningEmissionsReport(DuringMetalMachiningEmissionsReport report, string fileName)
     {
-        var fileName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
-        
         var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add(fileName);
 
@@ -308,10 +302,8 @@ public class ExportService : IExportService
         return stream;
     }
     
-    public MemoryStream CreateDuringWeldingOperationsEmissionsReport(DuringWeldingOperationsEmissionsReport report)
+    public MemoryStream CreateDuringWeldingOperationsEmissionsReport(DuringWeldingOperationsEmissionsReport report, string fileName)
     {
-        var fileName = $"ИЗА {report.PollutionSource}_{report.SelectionSource}";
-        
         var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add(fileName);
 
