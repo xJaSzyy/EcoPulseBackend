@@ -52,7 +52,7 @@ public class ReservoirsEmissionsReport
     /// Концентрация паров нефтепродуктов в выбросах при заполнении резервуаров
     /// </summary>
     [JsonIgnore]
-    public VaporConcentrationRecord VaporConcentration { get; set; } = null!;
+    public VaporConcentrationRecord? VaporConcentration { get; set; } = null!;
 
     /// <summary>
     /// Кол-во закачиваемого в резервуар нефтепродукта в осенне-зимний период, м3

@@ -1,7 +1,6 @@
 using EcoPulseBackend.Enums;
-using EcoPulseBackend.Extensions;
 using EcoPulseBackend.Interfaces;
-using EcoPulseBackend.Models;
+using EcoPulseBackend.Models.Calculate;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcoPulseBackend.Controllers;
@@ -20,8 +19,50 @@ public class EmissionController : ControllerBase
         _exportService = exportService;
         _logger = logger;
     }
+    [HttpPost("calculate/gasoline-generator")]
+    public IActionResult CalculateGasolineGenerator([FromBody] GasolineGeneratorEmissionsCalculateModel model)
+    {
+        var result = _emissionService.CalculateGasolineGeneratorEmissionsBatch(
+            new List<Pollutant> { Pollutant.CO, Pollutant.CH, Pollutant.NO2, Pollutant.NO, Pollutant.SO2 },
+            model.WorkHoursPerDay, model.WorkDaysPerYear,
+            model.GeneratorCount, model.SameGeneratorCount);
 
-    [HttpPost("reports/gasoline-generator")]
+        return Ok(result);
+    }
+    
+    [HttpPost("calculate/reservoirs")]
+    public IActionResult CalculateReservoirs([FromBody] ReservoirsEmissionsCalculateModel model)
+    {
+        var vaporConcentration = DataStorage.VaporConcentration[model.ReservoirType][model.ClimateZone][model.OilProduct];
+        var result = _emissionService.CalculateReservoirsEmissionsBatch(
+            new List<Pollutant> { Pollutant.RPK240280, Pollutant.H2S }, vaporConcentration,
+            model.AutumnWinterOilAmount, model.SpringSummerOilAmount,
+            model.DrainedVolume, model.AverageDrainTime);
+
+        return Ok(result.Emissions);
+    }
+    
+    [HttpPost("calculate/during-metal-machining")]
+    public IActionResult CalculateDuringMetalMachining([FromBody] DuringMetalMachiningEmissionsCalculateModel model)
+    { 
+        var result = _emissionService.CalculateDuringMetalMachiningEmissions(model.MetalMachiningMachineType, model.WorkDaysPerYear);
+
+        return Ok(result);
+    }
+    
+    [HttpPost("calculate/during-welding-operations")]
+    public IActionResult CalculateDuringWeldingOperations([FromBody] DuringWeldingOperationsEmissionsCalculateModel model)
+    {
+        var result = _emissionService.CalculateDuringWeldingOperationsEmissionsBatch(
+                new List<Pollutant> { Pollutant.Fe2O3, Pollutant.MnO2, Pollutant.FluorideGases },
+                model.ElectrodesPerYear,
+                model.WorkDaysPerYear);
+
+        return Ok(result.Emissions);
+    }
+    
+
+    /*[HttpPost("reports/gasoline-generator")]
     public IActionResult GetGasolineGeneratorReport([FromBody] GasolineGeneratorEmissionsReport report)
     {
         report.Emissions = _emissionService.CalculateGasolineGeneratorEmissionsBatch(
@@ -73,5 +114,5 @@ public class EmissionController : ControllerBase
         var stream = _exportService.CreateDuringWeldingOperationsEmissionsReport(report);
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-    }
+    }*/
 }
