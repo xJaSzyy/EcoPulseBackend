@@ -61,6 +61,14 @@ public class EmissionController : ControllerBase
         return Ok(result.Emissions);
     }
     
+    [HttpPost("calculate/maximum-single")]
+    public IActionResult CalculateMaximumSingle([FromBody] MaximumSingleEmissionsCalculateModel model)
+    {
+        var result = _emissionService.CalculateMaximumSingleEmissions(Pollutant.SP, model);
+
+        return Ok(result);
+    }
+    
 
     /*[HttpPost("reports/gasoline-generator")]
     public IActionResult GetGasolineGeneratorReport([FromBody] GasolineGeneratorEmissionsReport report)

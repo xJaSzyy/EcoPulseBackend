@@ -30,5 +30,10 @@ public class PollutantInfo
     /// <summary>
     /// Удельный выброс / концентрация
     /// </summary>
-    public float SpecificEmission { get; set; }
+    public float? SpecificEmission { get; set; }
+    
+    /// <summary>
+    /// Масса
+    /// </summary>
+    public float? Mass { get; set; }
 }

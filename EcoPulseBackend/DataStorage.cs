@@ -26,21 +26,24 @@ public static class DataStorage
             Code = 301,
             Name = "Азота диоксид (двуокись азота; пероксид азота)",
             Pollutant = Pollutant.NO2,
-            SpecificEmission = 0.112f
+            SpecificEmission = 0.112f,
+            Mass = 0.2695f
         },
         new PollutantInfo
         {
             Code = 304,
             Name = "Азота оксид (азот (II) оксид; азот монооксид)",
             Pollutant = Pollutant.NO,
-            SpecificEmission = 0.0182f
+            SpecificEmission = 0.0182f,
+            Mass = 0.0444f
         },
         new PollutantInfo
         {
             Code = 330,
             Name = "Серы диоксид",
             Pollutant = Pollutant.SO2,
-            SpecificEmission = 0.036f
+            SpecificEmission = 0.036f,
+            Mass = 1.0528f
         },
         new PollutantInfo
         {
@@ -75,6 +78,20 @@ public static class DataStorage
             Code = 342,
             Name = "Фториды газообразные /в пересчете на фтор/: гидрофторид (водород фторид, фторводород); кремний тетрафторид",
             Pollutant = Pollutant.FluorideGases
+        },
+        new PollutantInfo
+        {
+            Code = 1,
+            Name = "Углекислый газ",
+            Pollutant = Pollutant.CO2,
+            Mass = 4.9f
+        },
+        new PollutantInfo
+        {
+            Code = 2,
+            Name = "Твердые частицы",
+            Pollutant = Pollutant.SP,
+            Mass = 15.72f
         }
     };
 

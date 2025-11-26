@@ -53,5 +53,15 @@ public enum Pollutant
     /// <summary>
     /// Фториды газообразные /в пересчете на фтор/: гидрофторид (водород фторид, фторводород); кремний тетрафторид
     /// </summary>
-    FluorideGases = 342
+    FluorideGases = 342,
+    
+    /// <summary>
+    /// Углексилый газ
+    /// </summary>
+    CO2 = 1,
+    
+    /// <summary>
+    /// Твердые частицы
+    /// </summary>
+    SP = 2,
 }

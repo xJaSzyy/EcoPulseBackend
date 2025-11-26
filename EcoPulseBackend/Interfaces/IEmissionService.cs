@@ -1,5 +1,6 @@
 using EcoPulseBackend.Enums;
 using EcoPulseBackend.Models;
+using EcoPulseBackend.Models.Calculate;
 
 namespace EcoPulseBackend.Interfaces;
 
@@ -48,4 +49,13 @@ public interface IEmissionService
     public DuringWeldingOperationsEmissionsBatchResult CalculateDuringWeldingOperationsEmissionsBatch(
         List<Pollutant> pollutants,
         float electrodesPerYear, int workDaysPerYear);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pollutant"></param>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public List<EmissionsResult> CalculateMaximumSingleEmissions(Pollutant pollutant,
+        MaximumSingleEmissionsCalculateModel model);
 }
