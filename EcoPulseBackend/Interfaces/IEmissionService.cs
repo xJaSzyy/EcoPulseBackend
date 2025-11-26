@@ -51,11 +51,20 @@ public interface IEmissionService
         float electrodesPerYear, int workDaysPerYear);
 
     /// <summary>
-    /// 
+    /// Расчет выбросов загрязняющих вещество от одиночного точечного источника
     /// </summary>
-    /// <param name="pollutant"></param>
+    /// <param name="pollutant">Загрязняющее вещество</param>
     /// <param name="model"></param>
     /// <returns></returns>
     public List<EmissionsResult> CalculateMaximumSingleEmissions(Pollutant pollutant,
         MaximumSingleEmissionsCalculateModel model);
+
+    /// <summary>
+    /// Расчет выбросов движущегося автотранспорта
+    /// </summary>
+    /// <param name="pollutant">Загрязняющее вещество</param>
+    /// <param name="vehicleGroups">Список групп транспортных средств</param>
+    /// <param name="length">Протяженность автомагистрали (или ее участка) из которого исключена протяженность очереди автомобилей перед запрещающим сигналом светофора и длина соответствующей зоны перекрестка (для перекрестков, на которых проводились дополнительные обследования)</param>
+    /// <returns></returns>
+    public EmissionsResult CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length);
 }

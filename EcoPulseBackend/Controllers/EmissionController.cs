@@ -1,5 +1,6 @@
 using EcoPulseBackend.Enums;
 using EcoPulseBackend.Interfaces;
+using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.Calculate;
 using Microsoft.AspNetCore.Mvc;
 
@@ -65,6 +66,14 @@ public class EmissionController : ControllerBase
     public IActionResult CalculateMaximumSingle([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
         var result = _emissionService.CalculateMaximumSingleEmissions(Pollutant.SP, model);
+
+        return Ok(result);
+    }
+    
+    [HttpPost("calculate/vehicle-flow")]
+    public IActionResult CalculateVehicleFlowEmissions([FromBody] List<VehicleGroup> vehicleGroups, float length)
+    {
+        var result = _emissionService.CalculateVehicleFlowEmissions(Pollutant.CO, vehicleGroups, length);
 
         return Ok(result);
     }

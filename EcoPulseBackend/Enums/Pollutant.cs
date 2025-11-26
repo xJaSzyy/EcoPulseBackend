@@ -64,4 +64,34 @@ public enum Pollutant
     /// Твердые частицы
     /// </summary>
     SP = 2,
+    
+    /// <summary>
+    /// Оксиды азота (в пересчете на диоксид азота)
+    /// </summary>
+    NOx = 301,
+    
+    /// <summary>
+    /// Сажа 
+    /// </summary>
+    Soot = 328,
+    
+    /// <summary>
+    /// Керосин
+    /// </summary>
+    Kerosene = 2732,
+    
+    /// <summary>
+    /// Формальдегид
+    /// </summary>
+    CH2O = 1325,
+    
+    /// <summary>
+    /// Бенз(а)пирен
+    /// </summary>
+    C20H12 = 703,
+    
+    /// <summary>
+    /// Соединения свинца
+    /// </summary>
+    LeadCompounds = -1
 }

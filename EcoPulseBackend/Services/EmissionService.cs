@@ -83,6 +83,78 @@ public class EmissionService : IEmissionService
 
         return result;
     }
+    
+    public List<EmissionsResult> CalculateMaximumSingleEmissions(Pollutant pollutant, MaximumSingleEmissionsCalculateModel model)
+    {
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+
+        if (!pollutantInfo.Mass.HasValue)
+        {
+            return new List<EmissionsResult>();
+        }
+        
+        Setup(model);
+        
+        var distances = Enumerable.Range(1, model.Distance / 5).Select(i => i * 5f).ToList();
+        
+        var concentrations = GetNormalSurfaceConcentration(distances, (float)pollutantInfo.Mass); 
+        
+        var result = new List<EmissionsResult>();
+        
+        foreach (var concentration in concentrations)
+        {
+            result.Add(new EmissionsResult
+            {
+                MaximumEmission = concentration
+            });
+        }
+
+        return result;
+    }
+    
+    public EmissionsResult CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length)
+    {
+        var emission = 0f;
+
+        foreach (var vehicleGroup in vehicleGroups)
+        {
+            var specificEmission = DataStorage.VehicleEmissionFactors[vehicleGroup.VehicleType][pollutant];
+
+            var speedCorrectionFactor = DataStorage.GetSpeedCorrectionFactor(vehicleGroup.AverageSpeed);
+            
+            emission += specificEmission * vehicleGroup.MaxTrafficIntensity * speedCorrectionFactor;
+        }
+        
+        emission *= length / 3600f;
+
+        var result = new EmissionsResult
+        {
+            MaximumEmission = emission
+        };
+        
+        return result;
+    }
+
+    private float CalculateTrafficLightQueueEmission()
+    {
+        var trafficLightStopTime = 1f;
+        var trafficLightCycles = 1f;
+        var vehicleGroupsCount = 1f;
+        var specificIdlingEmission = 1f;
+        var vehiclesInQueueCount = 1f;
+        
+        var result = 1f/60f * trafficLightStopTime / 40f;
+
+        for (int i = 0; i < trafficLightCycles; i++)
+        {
+            for (int j = 0; j < vehicleGroupsCount; j++)
+            {
+                
+            }
+        }
+
+        return result;
+    }
 
     #region Private
 
@@ -197,34 +269,6 @@ public class EmissionService : IEmissionService
         _velocityRatio = 1.3f * _avgExitSpeed * _diameterSource / _heightSource;
         _buoyancyParam = 1000f * ((float)Math.Pow(_avgExitSpeed, 2) * _diameterSource) / ((float)Math.Pow(_heightSource, 2) * _tempDiff);
         _effectiveBuoyancy = 800f * (float)Math.Pow(_velocityRatio, 3);
-    }
-
-    public List<EmissionsResult> CalculateMaximumSingleEmissions(Pollutant pollutant, MaximumSingleEmissionsCalculateModel model)
-    {
-        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
-
-        if (!pollutantInfo.Mass.HasValue)
-        {
-            return new List<EmissionsResult>();
-        }
-        
-        Setup(model);
-        
-        var distances = Enumerable.Range(1, model.Distance / 5).Select(i => i * 5f).ToList();
-        
-        var concentrations = GetNormalSurfaceConcentration(distances, (float)pollutantInfo.Mass); 
-        
-        var result = new List<EmissionsResult>();
-        
-        foreach (var concentration in concentrations)
-        {
-            result.Add(new EmissionsResult
-            {
-                MaximumEmission = concentration
-            });
-        }
-
-        return result;
     }
 
     private List<float> GetNormalSurfaceConcentration(List<float> distances, float mass)
