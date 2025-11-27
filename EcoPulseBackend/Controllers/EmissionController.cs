@@ -77,7 +77,6 @@ public class EmissionController : ControllerBase
 
         return Ok(result);
     }
-    
 
     /*[HttpPost("reports/gasoline-generator")]
     public IActionResult GetGasolineGeneratorReport([FromBody] GasolineGeneratorEmissionsReport report)

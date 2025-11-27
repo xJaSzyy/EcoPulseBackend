@@ -12,14 +12,18 @@ public static class DataStorage
             Code = 337,
             Name = "Углерода оксид (углерод окись; углерод моноокись; угарный газ)",
             Pollutant = Pollutant.CO,
-            SpecificEmission = 7.5f
+            SpecificEmission = 7.5f,
+            MaxPermissibleConcentration = 5f,
+            DailyAverageConcentration = 3f
         },
         new PollutantInfo
         {
             Code = 2704,
             Name = "Бензин (нефтяной, малосернистый) /в пересчете на углерод/",
             Pollutant = Pollutant.CH,
-            SpecificEmission = 1.0f
+            SpecificEmission = 1.0f,
+            MaxPermissibleConcentration = 5f,
+            DailyAverageConcentration = 1.5f
         },
         new PollutantInfo
         {
@@ -27,7 +31,9 @@ public static class DataStorage
             Name = "Азота диоксид (двуокись азота; пероксид азота)",
             Pollutant = Pollutant.NO2,
             SpecificEmission = 0.112f,
-            Mass = 0.2695f
+            Mass = 0.2695f,
+            MaxPermissibleConcentration = 0.2f,
+            DailyAverageConcentration = 0.04f
         },
         new PollutantInfo
         {
@@ -35,7 +41,9 @@ public static class DataStorage
             Name = "Азота оксид (азот (II) оксид; азот монооксид)",
             Pollutant = Pollutant.NO,
             SpecificEmission = 0.0182f,
-            Mass = 0.0444f
+            Mass = 0.0444f,
+            MaxPermissibleConcentration = 0.4f,
+            DailyAverageConcentration = 0.06f
         },
         new PollutantInfo
         {
@@ -43,7 +51,9 @@ public static class DataStorage
             Name = "Серы диоксид",
             Pollutant = Pollutant.SO2,
             SpecificEmission = 0.036f,
-            Mass = 1.0528f
+            Mass = 1.0528f,
+            MaxPermissibleConcentration = 0.5f,
+            DailyAverageConcentration = 0.05f
         },
         new PollutantInfo
         {
@@ -51,7 +61,8 @@ public static class DataStorage
             Name = "Углеводороды предельные C12 - C19 (растворители РПК-240, РПК-280)",
             ShortName = "углеводороды",
             Pollutant = Pollutant.RPK240280,
-            SpecificEmission = 99.72f
+            SpecificEmission = 99.72f,
+            MaxPermissibleConcentration = 1f
         },
         new PollutantInfo
         {
@@ -59,36 +70,42 @@ public static class DataStorage
             Name = "Сероводород (дигидросульфид; водород сернистый; гидросульфид)",
             ShortName = "дигидросульфид",
             Pollutant = Pollutant.H2S,
-            SpecificEmission = 0.28f
+            SpecificEmission = 0.28f,
+            MaxPermissibleConcentration = 0.008f
         },
         new PollutantInfo
         {
             Code = 123,
             Name = "диЖелезо триоксид (железа оксид; железо сесквиоксид) /в пересчете на железо/",
-            Pollutant = Pollutant.Fe2O3
+            Pollutant = Pollutant.Fe2O3,
+            DailyAverageConcentration = 0.04f
         },
         new PollutantInfo
         {
             Code = 143,
             Name = "Марганец и его соединения /в пересчете на марганец (IV) оксид/",
-            Pollutant = Pollutant.MnO2
+            Pollutant = Pollutant.MnO2,
+            MaxPermissibleConcentration = 0.01f,
+            DailyAverageConcentration = 0.001f
         },
         new PollutantInfo
         {
             Code = 342,
             Name = "Фториды газообразные /в пересчете на фтор/: гидрофторид (водород фторид, фторводород); кремний тетрафторид",
-            Pollutant = Pollutant.FluorideGases
+            Pollutant = Pollutant.FluorideGases,
+            MaxPermissibleConcentration = 0.02f,
+            DailyAverageConcentration = 0.005f
         },
         new PollutantInfo
         {
-            Code = 1,
-            Name = "Углекислый газ",
+            Code = 380,
+            Name = "Углерод диоксид",
             Pollutant = Pollutant.CO2,
             Mass = 4.9f
         },
         new PollutantInfo
         {
-            Code = 2,
+            Code = 1,
             Name = "Твердые частицы",
             Pollutant = Pollutant.SP,
             Mass = 15.72f
