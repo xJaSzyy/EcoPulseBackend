@@ -77,6 +77,14 @@ public class EmissionController : ControllerBase
 
         return Ok(result);
     }
+    
+    [HttpPost("calculate/traffic-light-queue")]
+    public IActionResult CalculateTrafficLightQueueEmissions([FromBody] List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
+    {
+        var result = _emissionService.CalculateTrafficLightQueueEmissions(Pollutant.CO, vehicleGroups, trafficLightCycles, trafficLightStopTime);
+
+        return Ok(result);
+    }
 
     /*[HttpPost("reports/gasoline-generator")]
     public IActionResult GetGasolineGeneratorReport([FromBody] GasolineGeneratorEmissionsReport report)
