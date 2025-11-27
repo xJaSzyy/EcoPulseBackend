@@ -64,7 +64,18 @@ public interface IEmissionService
     /// </summary>
     /// <param name="pollutant">Загрязняющее вещество</param>
     /// <param name="vehicleGroups">Список групп транспортных средств</param>
-    /// <param name="length">Протяженность автомагистрали (или ее участка) из которого исключена протяженность очереди автомобилей перед запрещающим сигналом светофора и длина соответствующей зоны перекрестка (для перекрестков, на которых проводились дополнительные обследования)</param>
+    /// <param name="length">Протяженность автомагистрали (или ее участка)</param>
     /// <returns></returns>
     public EmissionsResult CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length);
+
+    /// <summary>
+    /// Расчет выбросов автотранспорта в районе регулируемого перекрестка
+    /// </summary>
+    /// <param name="pollutant">Загрязняющее вещество</param>
+    /// <param name="vehicleGroups">Список групп транспортных средств, стоящих в очереди</param>
+    /// <param name="trafficLightCycles">Количество циклов действия запрещающего сигнала светофора за 20-минутный период времени</param>
+    /// <param name="trafficLightStopTime">Продолжительность действия запрещающего сигнала светофора (включая желтый цвет)</param>
+    /// <returns></returns>
+    public EmissionsResult CalculateTrafficLightQueueEmissions(Pollutant pollutant,
+        List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime);
 }

@@ -40,10 +40,10 @@ public class PollutantInfo
     /// <summary>
     /// Предельно допустимая максимальная разовая концентрация
     /// </summary>
-    public float MaxPermissibleConcentration { get; set; }
+    public float? MaxPermissibleConcentration { get; set; }
     
     /// <summary>
     /// Предельно допустимая среднесуточная концентрация
     /// </summary>
-    public float DailyAverageConcentration { get; set; }
+    public float? DailyAverageConcentration { get; set; }
 }

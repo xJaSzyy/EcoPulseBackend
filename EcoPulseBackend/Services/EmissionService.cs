@@ -114,6 +114,8 @@ public class EmissionService : IEmissionService
     
     public EmissionsResult CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length)
     {
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+        
         var emission = 0f;
 
         foreach (var vehicleGroup in vehicleGroups)
@@ -129,30 +131,34 @@ public class EmissionService : IEmissionService
 
         var result = new EmissionsResult
         {
-            MaximumEmission = emission
+            MaximumEmission = emission,
+            PollutantInfo =  pollutantInfo
         };
         
         return result;
     }
 
-    private float CalculateTrafficLightQueueEmission()
+    public EmissionsResult CalculateTrafficLightQueueEmissions(Pollutant pollutant, List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
     {
-        var trafficLightStopTime = 1f;
-        var trafficLightCycles = 1f;
-        var vehicleGroupsCount = 1f;
-        var specificIdlingEmission = 1f;
-        var vehiclesInQueueCount = 1f;
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
         
-        var result = 1f/60f * trafficLightStopTime / 40f;
+        var emission = 0f;
 
-        for (int i = 0; i < trafficLightCycles; i++)
+        foreach (var vehicleGroup in vehicleGroups)
         {
-            for (int j = 0; j < vehicleGroupsCount; j++)
-            {
-                
-            }
-        }
+            var specificEmission = DataStorage.VehicleSpecificEmissions[vehicleGroup.VehicleType][pollutant];
 
+            emission += specificEmission * vehicleGroup.VehiclesCount;
+        }
+        
+        emission *= trafficLightCycles * trafficLightStopTime / 40f;
+
+        var result = new EmissionsResult
+        {
+            MaximumEmission = emission,
+            PollutantInfo =  pollutantInfo
+        };
+        
         return result;
     }
 

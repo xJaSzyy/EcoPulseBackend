@@ -304,6 +304,104 @@ public static class DataStorage
         { 100, 0.65f }
     };
     
+    public static readonly Dictionary<VehicleType, Dictionary<Pollutant, float>> VehicleSpecificEmissions = new()
+    {
+        {
+            VehicleType.Passenger, new Dictionary<Pollutant, float>
+            {
+                { Pollutant.CO, 3.5f },
+                { Pollutant.NOx, 0.05f },
+                { Pollutant.CH, 0.25f },
+                { Pollutant.SO2, 0.01f },
+                { Pollutant.CH2O, 0.0008f },
+                { Pollutant.LeadCompounds, 0.0044f },
+                { Pollutant.C20H12, 2f * 1e-6f },
+            }
+        },
+        {
+            VehicleType.DieselPassenger, new Dictionary<Pollutant, float>
+            {
+                { Pollutant.CO, 0.13f },
+                { Pollutant.NOx, 0.08f },
+                { Pollutant.CH, 0.06f },
+                { Pollutant.Soot, 0.035f },
+                { Pollutant.SO2, 0.04f },
+                { Pollutant.CH2O, 0.0008f },
+            }
+        },
+        {
+            VehicleType.CargoCarburetorLow, new Dictionary<Pollutant, float>()
+            {
+                { Pollutant.CO, 6.3f },
+                { Pollutant.NOx, 0.075f },
+                { Pollutant.CH, 1f },
+                { Pollutant.SO2, 0.02f },
+                { Pollutant.CH2O, 0.0015f },
+                { Pollutant.LeadCompounds, 0.0047f },
+                { Pollutant.C20H12, 4f * 1e-6f },
+            }
+        },
+        {
+            VehicleType.CargoCarburetorHigh, new Dictionary<Pollutant, float>()
+            {
+                { Pollutant.CO, 18.4f },
+                { Pollutant.NOx, 0.2f },
+                { Pollutant.CH, 2.96f },
+                { Pollutant.SO2, 0.028f },
+                { Pollutant.CH2O, 0.006f },
+                { Pollutant.LeadCompounds, 0.0075f },
+                { Pollutant.C20H12, 4.5f * 1e-6f },
+            }
+        },
+        {
+            VehicleType.CarburetorBuses, new Dictionary<Pollutant, float>()
+            {
+                { Pollutant.CO, 16.1f },
+                { Pollutant.NOx, 0.16f },
+                { Pollutant.CH, 2.64f },
+                { Pollutant.SO2, 0.03f },
+                { Pollutant.CH2O, 0.012f },
+                { Pollutant.LeadCompounds, 0.0075f },
+                { Pollutant.C20H12, 4.5f * 1e-6f },
+            }
+        },
+        {
+            VehicleType.DieselTrucks, new Dictionary<Pollutant, float>()
+            {
+                { Pollutant.CO, 2.85f },
+                { Pollutant.NOx, 0.81f },
+                { Pollutant.CH, 0.3f },
+                { Pollutant.Soot, 0.07f },
+                { Pollutant.SO2, 0.075f },
+                { Pollutant.CH2O, 0.015f },
+                { Pollutant.C20H12, 6.3f * 1e-6f },
+            }
+        },
+        {
+            VehicleType.DieselBuses, new Dictionary<Pollutant, float>()
+            {
+                { Pollutant.CO, 3.07f },
+                { Pollutant.NOx, 0.7f },
+                { Pollutant.CH, 0.41f },
+                { Pollutant.Soot, 0.09f },
+                { Pollutant.SO2, 0.09f },
+                { Pollutant.CH2O, 0.02f },
+                { Pollutant.C20H12, 6.4f * 1e-6f },
+            }
+        },
+        {
+            VehicleType.CargoGas, new Dictionary<Pollutant, float>()
+            {
+                { Pollutant.CO, 6.44f },
+                { Pollutant.NOx, 0.09f },
+                { Pollutant.CH, 0.26f },
+                { Pollutant.SO2, 0.01f },
+                { Pollutant.CH2O, 0.0004f },
+                { Pollutant.C20H12, 3.6f * 1e-6f },
+            }
+        }
+    };
+    
     public static float GetSpeedCorrectionFactor(double speed)
     {
         var nearest = SpeedCorrectionFactors
