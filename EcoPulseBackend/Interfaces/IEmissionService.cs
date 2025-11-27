@@ -71,11 +71,11 @@ public interface IEmissionService
     /// <summary>
     /// Расчет выбросов автотранспорта в районе регулируемого перекрестка
     /// </summary>
-    /// <param name="pollutant">Загрязняющее вещество</param>
+    /// <param name="pollutants">Список загрязняющих веществ</param>
     /// <param name="vehicleGroups">Список групп транспортных средств, стоящих в очереди</param>
     /// <param name="trafficLightCycles">Количество циклов действия запрещающего сигнала светофора за 20-минутный период времени</param>
     /// <param name="trafficLightStopTime">Продолжительность действия запрещающего сигнала светофора (включая желтый цвет)</param>
     /// <returns></returns>
-    public EmissionsResult CalculateTrafficLightQueueEmissions(Pollutant pollutant,
+    public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(List<Pollutant> pollutants,
         List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime);
 }

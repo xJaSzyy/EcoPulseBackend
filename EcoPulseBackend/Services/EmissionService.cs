@@ -129,27 +129,19 @@ public class EmissionService : IEmissionService
         return result;
     }
 
-    public EmissionsResult CalculateTrafficLightQueueEmissions(Pollutant pollutant, List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
+    public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(List<Pollutant> pollutants, List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
     {
-        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
-        
-        var emission = 0f;
+        var result = new List<EmissionsResult>();
 
-        foreach (var vehicleGroup in vehicleGroups)
+        foreach (var pollutant in pollutants)
         {
-            var specificEmission = DataStorage.VehicleSpecificEmissions[vehicleGroup.VehicleType][pollutant];
-
-            emission += specificEmission * vehicleGroup.VehiclesCount;
+            var emission = CalculateTrafficLightQueueEmissions(pollutant, vehicleGroups, trafficLightCycles, trafficLightStopTime);
+            if (emission != null)
+            {
+                result.Add(emission);
+            }
         }
-        
-        emission *= trafficLightCycles * trafficLightStopTime / 40f;
 
-        var result = new EmissionsResult
-        {
-            MaximumEmission = emission,
-            PollutantInfo =  pollutantInfo
-        };
-        
         return result;
     }
 
@@ -434,6 +426,35 @@ public class EmissionService : IEmissionService
         }
         
         emission *= length / 3600f;
+
+        var result = new EmissionsResult
+        {
+            MaximumEmission = emission,
+            PollutantInfo =  pollutantInfo
+        };
+        
+        return result;
+    }
+    
+    private EmissionsResult? CalculateTrafficLightQueueEmissions(Pollutant pollutant, List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
+    {
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+        
+        if (!DataStorage.VehicleEmissionFactors[vehicleGroups.First().VehicleType].ContainsKey(pollutant))
+        {
+            return null;
+        }
+        
+        var emission = 0f;
+
+        foreach (var vehicleGroup in vehicleGroups)
+        {
+            var specificEmission = DataStorage.VehicleSpecificEmissions[vehicleGroup.VehicleType][pollutant];
+
+            emission += specificEmission * vehicleGroup.VehiclesCount;
+        }
+        
+        emission *= trafficLightCycles * trafficLightStopTime / 40f;
 
         var result = new EmissionsResult
         {

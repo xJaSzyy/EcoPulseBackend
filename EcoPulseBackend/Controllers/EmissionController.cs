@@ -85,7 +85,11 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/traffic-light-queue")]
     public IActionResult CalculateTrafficLightQueueEmissions([FromBody] List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
     {
-        var result = _emissionService.CalculateTrafficLightQueueEmissions(Pollutant.CO, vehicleGroups, trafficLightCycles, trafficLightStopTime);
+        var result = _emissionService.CalculateTrafficLightQueueEmissionsBatch(new List<Pollutant>
+        {
+            Pollutant.CO, Pollutant.NO2, Pollutant.CH, Pollutant.Soot,
+            Pollutant.SO2, Pollutant.LeadCompounds, Pollutant.CH2O, Pollutant.C20H12
+        }, vehicleGroups, trafficLightCycles, trafficLightStopTime);
 
         return Ok(result);
     }
