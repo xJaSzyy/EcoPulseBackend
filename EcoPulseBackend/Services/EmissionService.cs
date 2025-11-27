@@ -111,30 +111,21 @@ public class EmissionService : IEmissionService
 
         return result;
     }
-    
-    public EmissionsResult CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length)
+
+    public List<EmissionsResult> CalculateVehicleFlowEmissionsBatch(List<Pollutant> pollutants,
+        List<VehicleGroup> vehicleGroups, float length)
     {
-        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
-        
-        var emission = 0f;
+        var result = new List<EmissionsResult>();
 
-        foreach (var vehicleGroup in vehicleGroups)
+        foreach (var pollutant in pollutants)
         {
-            var specificEmission = DataStorage.VehicleEmissionFactors[vehicleGroup.VehicleType][pollutant];
-
-            var speedCorrectionFactor = DataStorage.GetSpeedCorrectionFactor(vehicleGroup.AverageSpeed);
-            
-            emission += specificEmission * vehicleGroup.MaxTrafficIntensity * speedCorrectionFactor;
+            var emission = CalculateVehicleFlowEmissions(pollutant, vehicleGroups, length);
+            if (emission != null)
+            {
+                result.Add(emission);
+            }
         }
-        
-        emission *= length / 3600f;
 
-        var result = new EmissionsResult
-        {
-            MaximumEmission = emission,
-            PollutantInfo =  pollutantInfo
-        };
-        
         return result;
     }
 
@@ -239,8 +230,6 @@ public class EmissionService : IEmissionService
         
         return result;
     }
-    
-    private const float WindAverageSpeed = 3;
 
     private float _heightSource; 
     private int _sedimentationRateRatio; 
@@ -248,8 +237,7 @@ public class EmissionService : IEmissionService
     private int _tempStratificationRatio; 
     private float _avgExitSpeed; 
     private float _ejectedTemp; 
-    private float _airTemp; 
-    private float _windSpeed;
+    private float _airTemp;
 
     private float _tempDiff;
     private float _volumeFlow;
@@ -267,8 +255,7 @@ public class EmissionService : IEmissionService
         _avgExitSpeed = model.AvgExitSpeed;
         _ejectedTemp = model.EjectedTemp;
         _airTemp = model.AirTemp;
-        _windSpeed = model.WindSpeed;
-        
+
         _tempDiff = _ejectedTemp - _airTemp;
         _volumeFlow = (float)Math.PI * (float)Math.Pow(_diameterSource, 2) / 4f * _avgExitSpeed; 
         _riseVelocity = 0.65f * (float)Math.Pow(_volumeFlow * _tempDiff / _heightSource, 1f / 3f);
@@ -288,34 +275,34 @@ public class EmissionService : IEmissionService
 
         foreach (var distance in distances)
         {
-            var x_div = distance / maxDistance;
+            var xDiv = distance / maxDistance;
 
-            switch (x_div)
+            switch (xDiv)
             {
                 case <= 1:
-                    s1 = 3f * (float)Math.Pow(x_div, 4) - 8f * (float)Math.Pow(x_div, 3) + 6f * (float)Math.Pow(x_div, 2);
+                    s1 = 3f * (float)Math.Pow(xDiv, 4) - 8f * (float)Math.Pow(xDiv, 3) + 6f * (float)Math.Pow(xDiv, 2);
                     break;
                 case <= 8:
-                    s1 = 1.13f / (0.13f * (float)Math.Pow(x_div, 2) + 1f);
+                    s1 = 1.13f / (0.13f * (float)Math.Pow(xDiv, 2) + 1f);
                     break;
                 case <= 100f when _sedimentationRateRatio <= 1.5f:
-                    s1 = x_div / (3.556f * (float)Math.Pow(x_div, 2) - 35.2f * x_div + 120f);
+                    s1 = xDiv / (3.556f * (float)Math.Pow(xDiv, 2) - 35.2f * xDiv + 120f);
                     break;
                 case <= 100f:
-                    s1 = 1f / (0.1f * (float)Math.Pow(x_div, 2) + 2.456f * x_div - 17.8f);
+                    s1 = 1f / (0.1f * (float)Math.Pow(xDiv, 2) + 2.456f * xDiv - 17.8f);
                     break;
                 case > 100f when _sedimentationRateRatio <= 1.5f:
-                    s1 = 144.3f * (float)Math.Pow(x_div, -7f / 3f);
+                    s1 = 144.3f * (float)Math.Pow(xDiv, -7f / 3f);
                     break;
                 case > 100f:
-                    s1 = 37.76f * (float)Math.Pow(x_div, -7f / 3f);
+                    s1 = 37.76f * (float)Math.Pow(xDiv, -7f / 3f);
                     break;
             }
 
-            if (_heightSource <= 10f && x_div < 1f)
+            if (_heightSource <= 10f && xDiv < 1f)
             {
-                var s1_h = 0.125f * (10f - _heightSource) + 0.125f * (_heightSource - 2f) * s1;
-                concentrations.Add(s1_h * maxConcentration);
+                var s1H = 0.125f * (10f - _heightSource) + 0.125f * (_heightSource - 2f) * s1;
+                concentrations.Add(s1H * maxConcentration);
                 return concentrations;
             }
 
@@ -327,7 +314,7 @@ public class EmissionService : IEmissionService
 
     private float GetMaximumSingleSurfaceConcentration(float mass)
     {
-        float c_m = 0;
+        float cM;
 
         const float nu = 1; //GetReliefCorrectionFactor();
 
@@ -344,9 +331,9 @@ public class EmissionService : IEmissionService
             else if (_riseVelocity < 0.5f)
             {
                 n = 4.4f * _riseVelocity;
-                var m_s = 2.86f * m;
-                c_m = _tempStratificationRatio * mass * _sedimentationRateRatio * m_s * nu / (float)Math.Pow(_heightSource, 7f / 3f);
-                return c_m;
+                var mS = 2.86f * m;
+                cM = _tempStratificationRatio * mass * _sedimentationRateRatio * mS * nu / (float)Math.Pow(_heightSource, 7f / 3f);
+                return cM;
             }
             else
             {
@@ -362,22 +349,22 @@ public class EmissionService : IEmissionService
 
             if (_velocityRatio >= 0.5f)
             {
-                var K = _diameterSource / 8f * _volumeFlow;
-                K = 1f / 7.1f * (float)Math.Sqrt(_avgExitSpeed * _volumeFlow);
-                c_m = _tempStratificationRatio * mass * _sedimentationRateRatio * n * nu * K / (float)Math.Pow(_heightSource, 4f / 3f);
-                return c_m;
+                var k = _diameterSource / 8f * _volumeFlow;
+                k = 1f / 7.1f * (float)Math.Sqrt(_avgExitSpeed * _volumeFlow);
+                cM = _tempStratificationRatio * mass * _sedimentationRateRatio * n * nu * k / (float)Math.Pow(_heightSource, 4f / 3f);
+                return cM;
             }
             else
             {
-                float m_s = 0.9f;
-                c_m = _tempStratificationRatio * mass * _sedimentationRateRatio * m_s * nu / (float)Math.Pow(_heightSource, 7f / 3f);
-                return c_m;
+                float mS = 0.9f;
+                cM = _tempStratificationRatio * mass * _sedimentationRateRatio * mS * nu / (float)Math.Pow(_heightSource, 7f / 3f);
+                return cM;
             }
         }
 
 
-        c_m = (_tempStratificationRatio * mass * _sedimentationRateRatio * m * n * nu / ((float)Math.Pow(_heightSource, 2) * (float)Math.Pow(_volumeFlow * _tempDiff, 1f / 3f)));
-        return c_m;
+        cM = (_tempStratificationRatio * mass * _sedimentationRateRatio * m * n * nu / ((float)Math.Pow(_heightSource, 2) * (float)Math.Pow(_volumeFlow * _tempDiff, 1f / 3f)));
+        return cM;
     }
 
     private float GetDistanceFromEmissionSourceSingle()
@@ -424,6 +411,37 @@ public class EmissionService : IEmissionService
 
         maxDistance = ((5f - _sedimentationRateRatio) / 4f) * d * _heightSource;
         return maxDistance;
+    }
+    
+    private static EmissionsResult? CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length)
+    {
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+        
+        if (!DataStorage.VehicleEmissionFactors[vehicleGroups.First().VehicleType].ContainsKey(pollutant))
+        {
+            return null;
+        }
+        
+        var emission = 0f;
+
+        foreach (var vehicleGroup in vehicleGroups)
+        {
+            var specificEmission = DataStorage.VehicleEmissionFactors[vehicleGroup.VehicleType][pollutant];
+
+            var speedCorrectionFactor = DataStorage.GetSpeedCorrectionFactor(vehicleGroup.AverageSpeed);
+            
+            emission += specificEmission * vehicleGroup.MaxTrafficIntensity * speedCorrectionFactor;
+        }
+        
+        emission *= length / 3600f;
+
+        var result = new EmissionsResult
+        {
+            MaximumEmission = emission,
+            PollutantInfo =  pollutantInfo
+        };
+        
+        return result;
     }
 
     #endregion

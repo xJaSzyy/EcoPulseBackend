@@ -62,11 +62,11 @@ public interface IEmissionService
     /// <summary>
     /// Расчет выбросов движущегося автотранспорта
     /// </summary>
-    /// <param name="pollutant">Загрязняющее вещество</param>
+    /// <param name="pollutants">Список загрязняющих веществ</param>
     /// <param name="vehicleGroups">Список групп транспортных средств</param>
     /// <param name="length">Протяженность автомагистрали (или ее участка)</param>
     /// <returns></returns>
-    public EmissionsResult CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length);
+    public List<EmissionsResult> CalculateVehicleFlowEmissionsBatch(List<Pollutant> pollutants, List<VehicleGroup> vehicleGroups, float length);
 
     /// <summary>
     /// Расчет выбросов автотранспорта в районе регулируемого перекрестка

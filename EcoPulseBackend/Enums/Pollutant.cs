@@ -66,11 +66,6 @@ public enum Pollutant
     SP = 2,
     
     /// <summary>
-    /// Оксиды азота (в пересчете на диоксид азота)
-    /// </summary>
-    NOx = 301,
-    
-    /// <summary>
     /// Сажа 
     /// </summary>
     Soot = 328,
@@ -93,5 +88,5 @@ public enum Pollutant
     /// <summary>
     /// Соединения свинца
     /// </summary>
-    LeadCompounds = -1
+    LeadCompounds = 184
 }

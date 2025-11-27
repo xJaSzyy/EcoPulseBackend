@@ -109,7 +109,35 @@ public static class DataStorage
             Name = "Твердые частицы",
             Pollutant = Pollutant.SP,
             Mass = 15.72f
-        }
+        },
+        new PollutantInfo
+        {
+            Code = 328,
+            Name = "Сажа",
+            Pollutant = Pollutant.Soot
+        },
+        new PollutantInfo
+        {
+            Code = 184,
+            Name = "Соединения свинца",
+            Pollutant = Pollutant.LeadCompounds,
+            MaxPermissibleConcentration = 0.001f,
+            DailyAverageConcentration = 0.0003f
+        },
+        new PollutantInfo
+        {
+            Code = 1325,
+            Name = "Формальдегид",
+            Pollutant = Pollutant.CH2O,
+            MaxPermissibleConcentration = 0.035f,
+            DailyAverageConcentration = 0.003f
+        },
+        new PollutantInfo
+        {
+            Code = 703,
+            Name = "Бенз(а)пирен",
+            Pollutant = Pollutant.C20H12,
+        },
     };
 
     public static readonly Dictionary<ReservoirType, Dictionary<ClimateZone, Dictionary<OilProduct, VaporConcentrationRecord>>>
@@ -195,7 +223,7 @@ public static class DataStorage
             VehicleType.Passenger, new Dictionary<Pollutant, float>
             {
                 { Pollutant.CO, 19f },
-                { Pollutant.NOx, 1.8f },
+                { Pollutant.NO2, 1.8f },
                 { Pollutant.CH, 2.1f },
                 { Pollutant.SO2, 0.065f },
                 { Pollutant.CH2O, 0.006f },
@@ -207,7 +235,7 @@ public static class DataStorage
             VehicleType.DieselPassenger, new Dictionary<Pollutant, float>
             {
                 { Pollutant.CO, 2f },
-                { Pollutant.NOx, 1.3f },
+                { Pollutant.NO2, 1.3f },
                 { Pollutant.CH, 0.25f },
                 { Pollutant.Soot, 0.1f },
                 { Pollutant.SO2, 0.21f },
@@ -218,7 +246,7 @@ public static class DataStorage
             VehicleType.CargoCarburetorLow, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 69.4f },
-                { Pollutant.NOx, 2.9f },
+                { Pollutant.NO2, 2.9f },
                 { Pollutant.CH, 11.5f },
                 { Pollutant.SO2, 0.2f },
                 { Pollutant.CH2O, 0.02f },
@@ -230,7 +258,7 @@ public static class DataStorage
             VehicleType.CargoCarburetorHigh, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 75f },
-                { Pollutant.NOx, 5.2f },
+                { Pollutant.NO2, 5.2f },
                 { Pollutant.CH, 13.4f },
                 { Pollutant.SO2, 0.22f },
                 { Pollutant.CH2O, 0.022f },
@@ -242,7 +270,7 @@ public static class DataStorage
             VehicleType.CarburetorBuses, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 97.6f },
-                { Pollutant.NOx, 5.3f },
+                { Pollutant.NO2, 5.3f },
                 { Pollutant.CH, 13.4f },
                 { Pollutant.SO2, 0.32f },
                 { Pollutant.CH2O, 0.03f },
@@ -254,7 +282,7 @@ public static class DataStorage
             VehicleType.DieselTrucks, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 8.5f },
-                { Pollutant.NOx, 7.7f },
+                { Pollutant.NO2, 7.7f },
                 { Pollutant.CH, 6f },
                 { Pollutant.Soot, 0.3f },
                 { Pollutant.SO2, 1.25f },
@@ -266,7 +294,7 @@ public static class DataStorage
             VehicleType.DieselBuses, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 8.8f },
-                { Pollutant.NOx, 8f },
+                { Pollutant.NO2, 8f },
                 { Pollutant.CH, 6.5f },
                 { Pollutant.Soot, 0.3f },
                 { Pollutant.SO2, 1.45f },
@@ -278,7 +306,7 @@ public static class DataStorage
             VehicleType.CargoGas, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 39f },
-                { Pollutant.NOx, 2.6f },
+                { Pollutant.NO2, 2.6f },
                 { Pollutant.CH, 1.3f },
                 { Pollutant.SO2, 0.18f },
                 { Pollutant.CH2O, 0.002f },
@@ -310,7 +338,7 @@ public static class DataStorage
             VehicleType.Passenger, new Dictionary<Pollutant, float>
             {
                 { Pollutant.CO, 3.5f },
-                { Pollutant.NOx, 0.05f },
+                { Pollutant.NO2, 0.05f },
                 { Pollutant.CH, 0.25f },
                 { Pollutant.SO2, 0.01f },
                 { Pollutant.CH2O, 0.0008f },
@@ -322,7 +350,7 @@ public static class DataStorage
             VehicleType.DieselPassenger, new Dictionary<Pollutant, float>
             {
                 { Pollutant.CO, 0.13f },
-                { Pollutant.NOx, 0.08f },
+                { Pollutant.NO2, 0.08f },
                 { Pollutant.CH, 0.06f },
                 { Pollutant.Soot, 0.035f },
                 { Pollutant.SO2, 0.04f },
@@ -333,7 +361,7 @@ public static class DataStorage
             VehicleType.CargoCarburetorLow, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 6.3f },
-                { Pollutant.NOx, 0.075f },
+                { Pollutant.NO2, 0.075f },
                 { Pollutant.CH, 1f },
                 { Pollutant.SO2, 0.02f },
                 { Pollutant.CH2O, 0.0015f },
@@ -345,7 +373,7 @@ public static class DataStorage
             VehicleType.CargoCarburetorHigh, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 18.4f },
-                { Pollutant.NOx, 0.2f },
+                { Pollutant.NO2, 0.2f },
                 { Pollutant.CH, 2.96f },
                 { Pollutant.SO2, 0.028f },
                 { Pollutant.CH2O, 0.006f },
@@ -357,7 +385,7 @@ public static class DataStorage
             VehicleType.CarburetorBuses, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 16.1f },
-                { Pollutant.NOx, 0.16f },
+                { Pollutant.NO2, 0.16f },
                 { Pollutant.CH, 2.64f },
                 { Pollutant.SO2, 0.03f },
                 { Pollutant.CH2O, 0.012f },
@@ -369,7 +397,7 @@ public static class DataStorage
             VehicleType.DieselTrucks, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 2.85f },
-                { Pollutant.NOx, 0.81f },
+                { Pollutant.NO2, 0.81f },
                 { Pollutant.CH, 0.3f },
                 { Pollutant.Soot, 0.07f },
                 { Pollutant.SO2, 0.075f },
@@ -381,7 +409,7 @@ public static class DataStorage
             VehicleType.DieselBuses, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 3.07f },
-                { Pollutant.NOx, 0.7f },
+                { Pollutant.NO2, 0.7f },
                 { Pollutant.CH, 0.41f },
                 { Pollutant.Soot, 0.09f },
                 { Pollutant.SO2, 0.09f },
@@ -393,7 +421,7 @@ public static class DataStorage
             VehicleType.CargoGas, new Dictionary<Pollutant, float>()
             {
                 { Pollutant.CO, 6.44f },
-                { Pollutant.NOx, 0.09f },
+                { Pollutant.NO2, 0.09f },
                 { Pollutant.CH, 0.26f },
                 { Pollutant.SO2, 0.01f },
                 { Pollutant.CH2O, 0.0004f },

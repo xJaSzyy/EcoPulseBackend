@@ -73,7 +73,11 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/vehicle-flow")]
     public IActionResult CalculateVehicleFlowEmissions([FromBody] List<VehicleGroup> vehicleGroups, float length)
     {
-        var result = _emissionService.CalculateVehicleFlowEmissions(Pollutant.CO, vehicleGroups, length);
+        var result = _emissionService.CalculateVehicleFlowEmissionsBatch(new List<Pollutant>
+        {
+            Pollutant.CO, Pollutant.NO2, Pollutant.CH, Pollutant.Soot,
+            Pollutant.SO2, Pollutant.LeadCompounds, Pollutant.CH2O, Pollutant.C20H12
+        }, vehicleGroups, length);
 
         return Ok(result);
     }
