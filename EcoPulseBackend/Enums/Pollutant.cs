@@ -58,7 +58,7 @@ public enum Pollutant
     /// <summary>
     /// Углексилый газ
     /// </summary>
-    CO2 = 1,
+    CO2 = 380,
     
     /// <summary>
     /// Твердые частицы

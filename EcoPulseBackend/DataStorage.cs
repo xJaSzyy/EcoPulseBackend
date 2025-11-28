@@ -106,7 +106,7 @@ public static class DataStorage
         },
         new PollutantInfo
         {
-            Code = 1,
+            Code = 2,
             Name = "Твердые частицы",
             Pollutant = Pollutant.SP,
             Mass = 15.72f,
