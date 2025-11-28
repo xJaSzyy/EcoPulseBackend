@@ -58,7 +58,7 @@ public interface IEmissionService
     /// <param name="pollutant">Загрязняющее вещество</param>
     /// <param name="model"></param>
     /// <returns></returns>
-    public List<EmissionsResult> CalculateMaximumSingleEmissions(Pollutant pollutant,
+    public EmissionsGroupResult CalculateMaximumSingleEmissions(Pollutant pollutant,
         MaximumSingleEmissionsCalculateModel model);
 
     /// <summary>

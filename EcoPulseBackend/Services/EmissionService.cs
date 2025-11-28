@@ -74,13 +74,13 @@ public class EmissionService : IEmissionService
         return result;
     }
     
-    public List<EmissionsResult> CalculateMaximumSingleEmissions(Pollutant pollutant, MaximumSingleEmissionsCalculateModel model)
+    public EmissionsGroupResult CalculateMaximumSingleEmissions(Pollutant pollutant, MaximumSingleEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
 
         if (!pollutantInfo.Mass.HasValue)
         {
-            return new List<EmissionsResult>();
+            return new EmissionsGroupResult();
         }
         
         Setup(model);
@@ -89,13 +89,14 @@ public class EmissionService : IEmissionService
         
         var concentrations = GetNormalSurfaceConcentration(distances, (float)pollutantInfo.Mass); 
         
-        var result = new List<EmissionsResult>();
+        var result = new EmissionsGroupResult { PollutantInfo = pollutantInfo };
         
         foreach (var concentration in concentrations)
         {
-            result.Add(new EmissionsResult
+            result.Emissions.Add(new EmissionsResult
             {
-                MaximumEmission = concentration
+                MaximumEmission = concentration,
+                Distance = distances[concentrations.IndexOf(concentration)]
             });
         }
 

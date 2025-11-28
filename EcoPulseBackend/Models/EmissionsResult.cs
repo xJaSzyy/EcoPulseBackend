@@ -10,4 +10,6 @@ public class EmissionsResult
     public float MaximumEmission { get; set; }
 
     public float GrossEmission { get; set; }
+
+    public float Distance { get; set; }
 }
