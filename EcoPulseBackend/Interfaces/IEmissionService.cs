@@ -55,11 +55,9 @@ public interface IEmissionService
     /// <summary>
     /// Расчет выбросов загрязняющих вещество от одиночного точечного источника
     /// </summary>
-    /// <param name="pollutant">Загрязняющее вещество</param>
     /// <param name="model"></param>
     /// <returns></returns>
-    public EmissionsGroupResult CalculateMaximumSingleEmissions(Pollutant pollutant,
-        MaximumSingleEmissionsCalculateModel model);
+    public EmissionsGroupResult CalculateMaximumSingleEmissions(MaximumSingleEmissionsCalculateModel model);
 
     /// <summary>
     /// Расчет выбросов движущегося автотранспорта

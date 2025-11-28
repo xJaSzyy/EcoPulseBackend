@@ -101,7 +101,8 @@ public static class DataStorage
             Code = 380,
             Name = "Углерод диоксид",
             Pollutant = Pollutant.CO2,
-            Mass = 4.9f
+            Mass = 4.9f,
+            MaxPermissibleConcentration = 5f
         },
         new PollutantInfo
         {
@@ -109,8 +110,7 @@ public static class DataStorage
             Name = "Твердые частицы",
             Pollutant = Pollutant.SP,
             Mass = 15.72f,
-            MaxPermissibleConcentration = 0.16f,
-            DailyAverageConcentration = 0.025f
+            MaxPermissibleConcentration = 0.5f
         },
         new PollutantInfo
         {

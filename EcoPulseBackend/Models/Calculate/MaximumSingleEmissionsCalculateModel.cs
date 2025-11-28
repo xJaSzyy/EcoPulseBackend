@@ -6,6 +6,11 @@ namespace EcoPulseBackend.Models.Calculate;
 public class MaximumSingleEmissionsCalculateModel
 {
     /// <summary>
+    /// Загрязняющее вещество
+    /// </summary>
+    public Pollutant Pollutant { get; set; }
+    
+    /// <summary>
     /// Температура выбрасываемой ГВС
     /// </summary>
     [Range(235, 265)]

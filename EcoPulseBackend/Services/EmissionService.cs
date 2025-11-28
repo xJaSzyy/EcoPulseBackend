@@ -74,9 +74,9 @@ public class EmissionService : IEmissionService
         return result;
     }
     
-    public EmissionsGroupResult CalculateMaximumSingleEmissions(Pollutant pollutant, MaximumSingleEmissionsCalculateModel model)
+    public EmissionsGroupResult CalculateMaximumSingleEmissions(MaximumSingleEmissionsCalculateModel model)
     {
-        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == model.Pollutant);
 
         if (!pollutantInfo.Mass.HasValue)
         {

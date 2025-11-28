@@ -66,7 +66,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/maximum-single")]
     public IActionResult CalculateMaximumSingle([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateMaximumSingleEmissions(Pollutant.SP, model);
+        var result = _emissionService.CalculateMaximumSingleEmissions(model);
 
         return Ok(result);
     }
