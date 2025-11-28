@@ -91,12 +91,19 @@ public class EmissionService : IEmissionService
         
         var result = new EmissionsGroupResult { PollutantInfo = pollutantInfo };
         
-        foreach (var concentration in concentrations)
+        var topConcentrations = concentrations
+            .Select((c, i) => new { Value = c, Index = i })
+            .OrderByDescending(x => x.Value)
+            .Take(model.MaxCount)
+            .OrderBy(x => distances[x.Index]) 
+            .ToList();
+
+        foreach (var item in topConcentrations)
         {
             result.Emissions.Add(new EmissionsResult
             {
-                MaximumEmission = concentration,
-                Distance = distances[concentrations.IndexOf(concentration)]
+                MaximumEmission = item.Value,
+                Distance = distances[item.Index]
             });
         }
 
