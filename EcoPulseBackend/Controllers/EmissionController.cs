@@ -47,7 +47,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/during-metal-machining")]
     public IActionResult CalculateDuringMetalMachining([FromBody] DuringMetalMachiningEmissionsCalculateModel model)
     { 
-        var result = _emissionService.CalculateDuringMetalMachiningEmissions(model.MetalMachiningMachineType, model.WorkDaysPerYear);
+        var result = _emissionService.CalculateDuringMetalMachiningEmissionsBatch(new List<Pollutant> { Pollutant.Fe2O3 }, model.MetalMachiningMachineType, model.WorkDaysPerYear);
 
         return Ok(result);
     }

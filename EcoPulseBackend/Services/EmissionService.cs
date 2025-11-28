@@ -40,26 +40,16 @@ public class EmissionService : IEmissionService
         return result;
     }
 
-    public EmissionsResult CalculateDuringMetalMachiningEmissions(MetalMachiningMachineType metalMachiningMachineType, int workDaysPerYear)
+    public List<EmissionsResult> CalculateDuringMetalMachiningEmissionsBatch(List<Pollutant> pollutants,
+        MetalMachiningMachineType metalMachiningMachineType, int workDaysPerYear)
     {
-        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == Pollutant.Fe2O3);
-        pollutantInfo.SpecificEmission = DataStorage.SpecificDustEmissionsByType.GetValueOrDefault(metalMachiningMachineType, 0f);
+        var result = new List<EmissionsResult>();
 
-        if (!pollutantInfo.SpecificEmission.HasValue)
+        foreach (var pollutant in pollutants.OrderBy(p => (int)p))
         {
-            return new EmissionsResult();
+            result.Add(CalculateDuringMetalMachiningEmissions(pollutant, metalMachiningMachineType, workDaysPerYear));
         }
-        
-        var maximumEmission = 0.2f * (float)pollutantInfo.SpecificEmission;
-        var grossEmission = 0.2f * 3.6f * (float)pollutantInfo.SpecificEmission * workDaysPerYear * 1e-3f;
 
-        var result = new EmissionsResult
-        {
-            PollutantInfo = pollutantInfo,
-            MaximumEmission = maximumEmission,
-            GrossEmission = grossEmission
-        };
-        
         return result;
     }
 
@@ -197,6 +187,29 @@ public class EmissionService : IEmissionService
             GrossEmission = grossEmission * (float)pollutantInfo.SpecificEmission * 1e-2f,
         };
 
+        return result;
+    }
+    
+    private static EmissionsResult CalculateDuringMetalMachiningEmissions(Pollutant pollutant, MetalMachiningMachineType metalMachiningMachineType, int workDaysPerYear)
+    {
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+        pollutantInfo.SpecificEmission = DataStorage.SpecificDustEmissionsByType.GetValueOrDefault(metalMachiningMachineType, 0f);
+
+        if (!pollutantInfo.SpecificEmission.HasValue)
+        {
+            return new EmissionsResult();
+        }
+        
+        var maximumEmission = 0.2f * (float)pollutantInfo.SpecificEmission;
+        var grossEmission = 0.2f * 3.6f * (float)pollutantInfo.SpecificEmission * workDaysPerYear * 1e-3f;
+
+        var result = new EmissionsResult
+        {
+            PollutantInfo = pollutantInfo,
+            MaximumEmission = maximumEmission,
+            GrossEmission = grossEmission
+        };
+        
         return result;
     }
     

@@ -34,10 +34,12 @@ public interface IEmissionService
     /// <summary>
     /// Расчет выбросов загрязняющих веществ при механической обработке металлов
     /// </summary>
+    /// <param name="pollutants">Список загрязняющих веществ</param>
     /// <param name="metalMachiningMachineType">Тип станка для обработки металла</param>
     /// <param name="workDaysPerYear">Годовой фонд времени работы оборудования, ч</param>
     /// <returns></returns>
-    public EmissionsResult CalculateDuringMetalMachiningEmissions(MetalMachiningMachineType metalMachiningMachineType, int workDaysPerYear);
+    public List<EmissionsResult> CalculateDuringMetalMachiningEmissionsBatch(List<Pollutant> pollutants,
+        MetalMachiningMachineType metalMachiningMachineType, int workDaysPerYear);
 
     /// <summary>
     /// Расчет выбросов загрязняющих веществ при сварочных работах
