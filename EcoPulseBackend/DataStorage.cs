@@ -108,7 +108,9 @@ public static class DataStorage
             Code = 1,
             Name = "Твердые частицы",
             Pollutant = Pollutant.SP,
-            Mass = 15.72f
+            Mass = 15.72f,
+            MaxPermissibleConcentration = 0.16f,
+            DailyAverageConcentration = 0.025f
         },
         new PollutantInfo
         {
