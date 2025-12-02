@@ -130,7 +130,7 @@ public class EmissionService : IEmissionService
         return pollutants.OrderBy(p => (int)p).Select(pollutant => CalculateTrafficLightQueueEmissions(pollutant, model)).OfType<EmissionsResult>().ToList();
     }
 
-    public EmissionsResult CalculateOpenCoalWarehouseEmissions(OpenCoalWarehouseEmissionsCalculateModel model)
+    public List<EmissionsResult> CalculateOpenCoalWarehouseEmissions(OpenCoalWarehouseEmissionsCalculateModel model)
     {
         const float humidityFactor = 0.7f;
         const float averageWindSpeedFactor = 1.2f;
@@ -152,7 +152,7 @@ public class EmissionService : IEmissionService
             GrossEmission = grossEmission
         };
 
-        return result;
+        return new List<EmissionsResult> { result };
     }
 
     #region Private
