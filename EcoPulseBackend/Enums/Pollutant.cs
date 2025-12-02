@@ -88,5 +88,10 @@ public enum Pollutant
     /// <summary>
     /// Соединения свинца
     /// </summary>
-    LeadCompounds = 184
+    LeadCompounds = 184,
+    
+    /// <summary>
+    /// Пыль каменного угля
+    /// </summary>
+    CoalDust = 3749
 }

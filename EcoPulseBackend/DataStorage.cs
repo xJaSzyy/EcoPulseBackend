@@ -140,6 +140,12 @@ public static class DataStorage
             Name = "Бенз(а)пирен",
             Pollutant = Pollutant.C20H12,
         },
+        new PollutantInfo
+        {
+            Code = 3749,
+            Name = "Пыль каменного угля",
+            Pollutant = Pollutant.CoalDust,
+        },
     };
 
     public static readonly Dictionary<ReservoirType, Dictionary<ClimateZone, Dictionary<OilProduct, VaporConcentrationRecord>>>
