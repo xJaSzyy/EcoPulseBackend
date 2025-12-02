@@ -95,6 +95,15 @@ public class EmissionController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("calculate/open-coal-warehouse")]
+    public IActionResult CalculateOpenCoalWarehouseEmissions([FromBody] OpenCoalWarehouseEmissionsCalculateModel model)
+    {
+        var result = _emissionService.CalculateOpenCoalWarehouseEmissions(Pollutant.CoalDust, model.SpecificEmission,
+            model.UnloadMaterialCountPerYear, model.UnloadMaterialCountPerHour, model.DustSuppressionEfficiency);
+
+        return Ok(result);
+    }
+
     /*[HttpPost("reports/gasoline-generator")]
     public IActionResult GetGasolineGeneratorReport([FromBody] GasolineGeneratorEmissionsReport report)
     {
@@ -108,7 +117,7 @@ public class EmissionController : ControllerBase
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
-    
+
     [HttpPost("reports/reservoirs")]
     public IActionResult GetReservoirsReport([FromBody] ReservoirsEmissionsReport report)
     {
@@ -123,7 +132,7 @@ public class EmissionController : ControllerBase
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
-    
+
     [HttpPost("reports/during-metal-machining")]
     public IActionResult GetDuringMetalMachiningReport([FromBody] DuringMetalMachiningEmissionsReport report)
     {
@@ -134,7 +143,7 @@ public class EmissionController : ControllerBase
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
     }
-    
+
     [HttpPost("reports/during-welding-operations")]
     public IActionResult GetDuringWeldingOperationsReport([FromBody] DuringWeldingOperationsEmissionsReport report)
     {
