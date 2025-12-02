@@ -78,4 +78,18 @@ public interface IEmissionService
     /// <returns></returns>
     public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(List<Pollutant> pollutants,
         List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime);
+
+
+    /// <summary>
+    /// Расчет выбросов угольной пыли в атмосферу от открытых складов угля
+    /// </summary>
+    /// <param name="pollutant">Загрязняющее вещество</param>
+    /// <param name="specificEmission">Удельное выделение твердых частиц при разгрузке материала, г/т</param>
+    /// <param name="unloadMaterialCountPerYear">Количество разгружаемого материала, т/г</param>
+    /// <param name="unloadMaterialCountPerHour">Количество разгружаемого материала, т/ч</param>
+    /// <param name="dustSuppressionEfficiency">Эффективность применяемого средства пылеподавления, дол. ед.</param>
+    /// <returns></returns>
+    public EmissionsResult CalculateOpenCoalWarehouseEmissions(Pollutant pollutant,
+        float specificEmission, float unloadMaterialCountPerYear, float unloadMaterialCountPerHour,
+        float dustSuppressionEfficiency);
 }

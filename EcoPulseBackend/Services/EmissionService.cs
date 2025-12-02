@@ -143,6 +143,32 @@ public class EmissionService : IEmissionService
         return result;
     }
 
+    public EmissionsResult CalculateOpenCoalWarehouseEmissions(Pollutant pollutant, float specificEmission,
+        float unloadMaterialCountPerYear, float unloadMaterialCountPerHour, float dustSuppressionEfficiency)
+    {
+        const float humidityFactor = 0.7f;
+        const float averageWindSpeedFactor = 1.2f;
+        const float pileHeightFactor = 2.5f;
+        const float protectionDegreeFactor = 1f;
+        const float maxWindSpeedFactor = 1.7f;
+
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+
+        var grossEmission = specificEmission * unloadMaterialCountPerYear * humidityFactor * averageWindSpeedFactor *
+                            pileHeightFactor * protectionDegreeFactor * 1e-6f * (1f - dustSuppressionEfficiency);
+        var maximumEmission = specificEmission * unloadMaterialCountPerHour * humidityFactor * maxWindSpeedFactor *
+            pileHeightFactor * protectionDegreeFactor * (1f - dustSuppressionEfficiency) / 3600f;
+
+        var result = new EmissionsResult
+        {
+            PollutantInfo = pollutantInfo,
+            MaximumEmission = maximumEmission,
+            GrossEmission = grossEmission
+        };
+
+        return result;
+    }
+
     #region Private
 
     private static EmissionsResult CalculateGasolineGeneratorEmissions(Pollutant pollutant,
