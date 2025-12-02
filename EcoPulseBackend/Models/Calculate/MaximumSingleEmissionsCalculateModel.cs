@@ -58,10 +58,12 @@ public class MaximumSingleEmissionsCalculateModel
     /// <summary>
     /// Расстояние от источника выброса
     /// </summary>
+    [Range(5, 10000)]
     public int Distance { get; set; }
     
     /// <summary>
     /// Количество максимальных точек
     /// </summary>
+    [Range(1, 10000)]
     public int MaxCount { get; set; }
 }
