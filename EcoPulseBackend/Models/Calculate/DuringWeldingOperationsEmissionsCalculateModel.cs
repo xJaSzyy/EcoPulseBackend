@@ -1,5 +1,8 @@
 namespace EcoPulseBackend.Models.Calculate;
 
+/// <summary>
+/// Модель для расчета выбросов загрязняющих веществ при сварочных работах
+/// </summary>
 public class DuringWeldingOperationsEmissionsCalculateModel
 {
     /// <summary>

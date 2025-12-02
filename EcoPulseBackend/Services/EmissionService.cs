@@ -7,57 +7,55 @@ namespace EcoPulseBackend.Services;
 
 public class EmissionService : IEmissionService
 {
-    public List<EmissionsResult> CalculateGasolineGeneratorEmissionsBatch(List<Pollutant> pollutants,
-        int workHoursPerDay, int workDaysPerYear, int generatorCount, int sameGeneratorCount)
+    public List<EmissionsResult> CalculateGasolineGeneratorEmissionsBatch(GasolineGeneratorEmissionsCalculateModel model)
     {
+        var pollutants = new List<Pollutant> { Pollutant.CO, Pollutant.CH, Pollutant.NO2, Pollutant.NO, Pollutant.SO2 };
+        
         var result = new List<EmissionsResult>();
 
         foreach (var pollutant in pollutants.OrderBy(p => (int)p))
         {
-            result.Add(CalculateGasolineGeneratorEmissions(pollutant, workHoursPerDay, workDaysPerYear, generatorCount, sameGeneratorCount));
+            result.Add(CalculateGasolineGeneratorEmissions(pollutant, model));
         }
 
         return result;
     }
 
-    public ReservoirsEmissionsBatchResult CalculateReservoirsEmissionsBatch(List<Pollutant> pollutants,
-        VaporConcentrationRecord vaporConcentration, float autumnWinterOilAmount, float springSummerOilAmount,
-        float drainedVolume, float averageDrainTime = 1200f)
+    public ReservoirsEmissionsBatchResult CalculateReservoirsEmissionsBatch(ReservoirsEmissionsCalculateModel model)
     {
+        var pollutants = new List<Pollutant> { Pollutant.RPK240280, Pollutant.H2S };
+        
+        var vaporConcentration = DataStorage.VaporConcentration[model.ReservoirType][model.ClimateZone][model.OilProduct];
+        
         var result = new ReservoirsEmissionsBatchResult
         {
-            AnnualInjectionEmissions = (vaporConcentration.AutumnWinterVaporConcentration * autumnWinterOilAmount + vaporConcentration.SpringSummerVaporConcentration * springSummerOilAmount) * 1e-6f,
-            AnnualIrrigationEmissions = 50f * (autumnWinterOilAmount + springSummerOilAmount) * 1e-6f,
-            MaxVaporEmission = (vaporConcentration.MaxVaporConcentration * drainedVolume) / averageDrainTime,
+            AnnualInjectionEmissions = (vaporConcentration.AutumnWinterVaporConcentration * model.AutumnWinterOilAmount + vaporConcentration.SpringSummerVaporConcentration * model.SpringSummerOilAmount) * 1e-6f,
+            AnnualIrrigationEmissions = 50f * (model.AutumnWinterOilAmount + model.SpringSummerOilAmount) * 1e-6f,
+            MaxVaporEmission = (vaporConcentration.MaxVaporConcentration * model.DrainedVolume) / model.AverageDrainTime,
             Emissions = new List<EmissionsResult>()
         };
         
         foreach (var pollutant in pollutants.OrderBy(p => (int)p))
         {
-            result.Emissions.Add(CalculateReservoirsEmissions(pollutant, vaporConcentration, autumnWinterOilAmount, springSummerOilAmount, drainedVolume, averageDrainTime));
+            result.Emissions.Add(CalculateReservoirsEmissions(pollutant, vaporConcentration, model));
         }
         
         return result;
     }
 
-    public List<EmissionsResult> CalculateDuringMetalMachiningEmissionsBatch(List<Pollutant> pollutants,
-        MetalMachiningMachineType metalMachiningMachineType, int workDaysPerYear)
+    public List<EmissionsResult> CalculateDuringMetalMachiningEmissionsBatch(DuringMetalMachiningEmissionsCalculateModel model)
     {
-        var result = new List<EmissionsResult>();
+        var pollutants = new List<Pollutant> { Pollutant.Fe2O3 };
 
-        foreach (var pollutant in pollutants.OrderBy(p => (int)p))
-        {
-            result.Add(CalculateDuringMetalMachiningEmissions(pollutant, metalMachiningMachineType, workDaysPerYear));
-        }
-
-        return result;
+        return pollutants.OrderBy(p => (int)p).Select(pollutant => CalculateDuringMetalMachiningEmissions(pollutant, model)).ToList();
     }
 
-    public DuringWeldingOperationsEmissionsBatchResult CalculateDuringWeldingOperationsEmissionsBatch(List<Pollutant> pollutants,
-        float electrodesPerYear, int workDaysPerYear)
+    public DuringWeldingOperationsEmissionsBatchResult CalculateDuringWeldingOperationsEmissionsBatch(DuringWeldingOperationsEmissionsCalculateModel model)
     {
-        var normElectrodesPerYear = electrodesPerYear * (100 - 15) * 1e-2f;
-        var materialsConsumption = normElectrodesPerYear / workDaysPerYear;
+        var pollutants = new List<Pollutant> { Pollutant.Fe2O3, Pollutant.MnO2, Pollutant.FluorideGases };
+        
+        var normElectrodesPerYear = model.ElectrodesPerYear * (100f - 15f) * 1e-2f;
+        var materialsConsumption = normElectrodesPerYear / model.WorkDaysPerYear;
         
         var result = new DuringWeldingOperationsEmissionsBatchResult
         {
@@ -68,7 +66,7 @@ public class EmissionService : IEmissionService
 
         foreach (var pollutant in pollutants.OrderBy(p => (int)p))
         {
-            result.Emissions.Add(CalculateDuringWeldingOperationsEmissions(pollutant, workDaysPerYear, materialsConsumption));
+            result.Emissions.Add(CalculateDuringWeldingOperationsEmissions(pollutant, model.WorkDaysPerYear, materialsConsumption));
         }
 
         return result;
@@ -110,41 +108,29 @@ public class EmissionService : IEmissionService
         return result;
     }
 
-    public List<EmissionsResult> CalculateVehicleFlowEmissionsBatch(List<Pollutant> pollutants,
-        List<VehicleGroup> vehicleGroups, float length)
+    public List<EmissionsResult> CalculateVehicleFlowEmissionsBatch(VehicleFlowEmissionsCalculateModel model)
     {
-        var result = new List<EmissionsResult>();
-
-        foreach (var pollutant in pollutants)
+        var pollutants = new List<Pollutant>
         {
-            var emission = CalculateVehicleFlowEmissions(pollutant, vehicleGroups, length);
-            if (emission != null)
-            {
-                result.Add(emission);
-            }
-        }
+            Pollutant.CO, Pollutant.NO2, Pollutant.CH, Pollutant.Soot,
+            Pollutant.SO2, Pollutant.LeadCompounds, Pollutant.CH2O, Pollutant.C20H12
+        };
 
-        return result;
+        return pollutants.OrderBy(p => (int)p).Select(pollutant => CalculateVehicleFlowEmissions(pollutant, model)).OfType<EmissionsResult>().ToList();
     }
 
-    public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(List<Pollutant> pollutants, List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
+    public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(TrafficLightQueueEmissionsCalculateModel model)
     {
-        var result = new List<EmissionsResult>();
-
-        foreach (var pollutant in pollutants)
+        var pollutants = new List<Pollutant>
         {
-            var emission = CalculateTrafficLightQueueEmissions(pollutant, vehicleGroups, trafficLightCycles, trafficLightStopTime);
-            if (emission != null)
-            {
-                result.Add(emission);
-            }
-        }
+            Pollutant.CO, Pollutant.NO2, Pollutant.CH, Pollutant.Soot,
+            Pollutant.SO2, Pollutant.LeadCompounds, Pollutant.CH2O, Pollutant.C20H12
+        };
 
-        return result;
+        return pollutants.OrderBy(p => (int)p).Select(pollutant => CalculateTrafficLightQueueEmissions(pollutant, model)).OfType<EmissionsResult>().ToList();
     }
 
-    public EmissionsResult CalculateOpenCoalWarehouseEmissions(Pollutant pollutant, float specificEmission,
-        float unloadMaterialCountPerYear, float unloadMaterialCountPerHour, float dustSuppressionEfficiency)
+    public EmissionsResult CalculateOpenCoalWarehouseEmissions(OpenCoalWarehouseEmissionsCalculateModel model)
     {
         const float humidityFactor = 0.7f;
         const float averageWindSpeedFactor = 1.2f;
@@ -152,12 +138,12 @@ public class EmissionService : IEmissionService
         const float protectionDegreeFactor = 1f;
         const float maxWindSpeedFactor = 1.7f;
 
-        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == Pollutant.CoalDust);
 
-        var grossEmission = specificEmission * unloadMaterialCountPerYear * humidityFactor * averageWindSpeedFactor *
-                            pileHeightFactor * protectionDegreeFactor * 1e-6f * (1f - dustSuppressionEfficiency);
-        var maximumEmission = specificEmission * unloadMaterialCountPerHour * humidityFactor * maxWindSpeedFactor *
-            pileHeightFactor * protectionDegreeFactor * (1f - dustSuppressionEfficiency) / 3600f;
+        var grossEmission = model.SpecificEmission * model.UnloadMaterialCountPerYear * humidityFactor * averageWindSpeedFactor *
+                            pileHeightFactor * protectionDegreeFactor * 1e-6f * (1f - model.DustSuppressionEfficiency);
+        var maximumEmission = model.SpecificEmission * model.UnloadMaterialCountPerHour * humidityFactor * maxWindSpeedFactor *
+            pileHeightFactor * protectionDegreeFactor * (1f - model.DustSuppressionEfficiency) / 3600f;
 
         var result = new EmissionsResult
         {
@@ -171,8 +157,7 @@ public class EmissionService : IEmissionService
 
     #region Private
 
-    private static EmissionsResult CalculateGasolineGeneratorEmissions(Pollutant pollutant,
-        int workHoursPerDay, int workDaysPerYear, int generatorCount, int sameGeneratorCount)
+    private static EmissionsResult CalculateGasolineGeneratorEmissions(Pollutant pollutant, GasolineGeneratorEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
 
@@ -181,9 +166,9 @@ public class EmissionService : IEmissionService
             return new EmissionsResult();
         }
         
-        var maximumEmission = 0.25f * (float)pollutantInfo.SpecificEmission * 5f * sameGeneratorCount / 3600f;
-        var grossEmission = 0.25f * (float)pollutantInfo.SpecificEmission * 5f * workHoursPerDay * workDaysPerYear *
-                            generatorCount * 1e-6f;
+        var maximumEmission = 0.25f * (float)pollutantInfo.SpecificEmission * 5f * model.SameGeneratorCount / 3600f;
+        var grossEmission = 0.25f * (float)pollutantInfo.SpecificEmission * 5f * model.WorkHoursPerDay * model.WorkDaysPerYear *
+                            model.GeneratorCount * 1e-6f;
 
         var result = new EmissionsResult
         {
@@ -195,9 +180,7 @@ public class EmissionService : IEmissionService
         return result;
     }
     
-    private static EmissionsResult CalculateReservoirsEmissions(Pollutant pollutant,
-        VaporConcentrationRecord vaporConcentration, float autumnWinterOilAmount, float springSummerOilAmount,
-        float drainedVolume, float averageDrainTime = 1200f)
+    private static EmissionsResult CalculateReservoirsEmissions(Pollutant pollutant, VaporConcentrationRecord vaporConcentration, ReservoirsEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
 
@@ -206,12 +189,12 @@ public class EmissionService : IEmissionService
             return new EmissionsResult();
         }
         
-        var annualInjectionEmissions = (vaporConcentration.AutumnWinterVaporConcentration * autumnWinterOilAmount +
-                                        vaporConcentration.SpringSummerVaporConcentration * springSummerOilAmount) *
+        var annualInjectionEmissions = (vaporConcentration.AutumnWinterVaporConcentration * model.AutumnWinterOilAmount +
+                                        vaporConcentration.SpringSummerVaporConcentration * model.SpringSummerOilAmount) *
                                        1e-6f;
-        var annualIrrigationEmissions = 50f * (autumnWinterOilAmount + springSummerOilAmount) * 1e-6f;
+        var annualIrrigationEmissions = 50f * (model.AutumnWinterOilAmount + model.SpringSummerOilAmount) * 1e-6f;
 
-        var maxVaporEmission = (vaporConcentration.MaxVaporConcentration * drainedVolume) / averageDrainTime;
+        var maxVaporEmission = (vaporConcentration.MaxVaporConcentration * model.DrainedVolume) / model.AverageDrainTime;
         var grossEmission = annualInjectionEmissions + annualIrrigationEmissions;
 
         var result = new EmissionsResult
@@ -224,10 +207,10 @@ public class EmissionService : IEmissionService
         return result;
     }
     
-    private static EmissionsResult CalculateDuringMetalMachiningEmissions(Pollutant pollutant, MetalMachiningMachineType metalMachiningMachineType, int workDaysPerYear)
+    private static EmissionsResult CalculateDuringMetalMachiningEmissions(Pollutant pollutant, DuringMetalMachiningEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
-        pollutantInfo.SpecificEmission = DataStorage.SpecificDustEmissionsByType.GetValueOrDefault(metalMachiningMachineType, 0f);
+        pollutantInfo.SpecificEmission = DataStorage.SpecificDustEmissionsByType.GetValueOrDefault(model.MetalMachiningMachineType, 0f);
 
         if (!pollutantInfo.SpecificEmission.HasValue)
         {
@@ -235,7 +218,7 @@ public class EmissionService : IEmissionService
         }
         
         var maximumEmission = 0.2f * (float)pollutantInfo.SpecificEmission;
-        var grossEmission = 0.2f * 3.6f * (float)pollutantInfo.SpecificEmission * workDaysPerYear * 1e-3f;
+        var grossEmission = 0.2f * 3.6f * (float)pollutantInfo.SpecificEmission * model.WorkDaysPerYear * 1e-3f;
 
         var result = new EmissionsResult
         {
@@ -452,18 +435,18 @@ public class EmissionService : IEmissionService
         return maxDistance;
     }
     
-    private static EmissionsResult? CalculateVehicleFlowEmissions(Pollutant pollutant, List<VehicleGroup> vehicleGroups, float length)
+    private static EmissionsResult? CalculateVehicleFlowEmissions(Pollutant pollutant, VehicleFlowEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
         
-        if (!DataStorage.VehicleEmissionFactors[vehicleGroups.First().VehicleType].ContainsKey(pollutant))
+        if (!DataStorage.VehicleEmissionFactors[model.VehicleGroups.First().VehicleType].ContainsKey(pollutant))
         {
             return null;
         }
         
         var emission = 0f;
 
-        foreach (var vehicleGroup in vehicleGroups)
+        foreach (var vehicleGroup in model.VehicleGroups)
         {
             var specificEmission = DataStorage.VehicleEmissionFactors[vehicleGroup.VehicleType][pollutant];
 
@@ -472,7 +455,7 @@ public class EmissionService : IEmissionService
             emission += specificEmission * vehicleGroup.MaxTrafficIntensity * speedCorrectionFactor;
         }
         
-        emission *= length / 3600f;
+        emission *= model.Length / 3600f;
 
         var result = new EmissionsResult
         {
@@ -483,25 +466,25 @@ public class EmissionService : IEmissionService
         return result;
     }
     
-    private EmissionsResult? CalculateTrafficLightQueueEmissions(Pollutant pollutant, List<VehicleGroupQueue> vehicleGroups, int trafficLightCycles, float trafficLightStopTime)
+    private EmissionsResult? CalculateTrafficLightQueueEmissions(Pollutant pollutant, TrafficLightQueueEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == pollutant);
         
-        if (!DataStorage.VehicleEmissionFactors[vehicleGroups.First().VehicleType].ContainsKey(pollutant))
+        if (!DataStorage.VehicleEmissionFactors[model.VehicleGroups.First().VehicleType].ContainsKey(pollutant))
         {
             return null;
         }
         
         var emission = 0f;
 
-        foreach (var vehicleGroup in vehicleGroups)
+        foreach (var vehicleGroup in model.VehicleGroups)
         {
             var specificEmission = DataStorage.VehicleSpecificEmissions[vehicleGroup.VehicleType][pollutant];
 
             emission += specificEmission * vehicleGroup.VehiclesCount;
         }
         
-        emission *= trafficLightCycles * trafficLightStopTime / 40f;
+        emission *= model.TrafficLightCycles * model.TrafficLightStopTime / 40f;
 
         var result = new EmissionsResult
         {

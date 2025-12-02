@@ -2,6 +2,9 @@ using EcoPulseBackend.Enums;
 
 namespace EcoPulseBackend.Models.Calculate;
 
+/// <summary>
+/// Модель для расчета выбросов загрязняющих веществ при механической обработке металлов
+/// </summary>
 public class DuringMetalMachiningEmissionsCalculateModel
 {
     /// <summary>

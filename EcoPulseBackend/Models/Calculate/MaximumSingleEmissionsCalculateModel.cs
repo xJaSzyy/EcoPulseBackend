@@ -3,6 +3,9 @@ using EcoPulseBackend.Enums;
 
 namespace EcoPulseBackend.Models.Calculate;
 
+/// <summary>
+/// Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника
+/// </summary>
 public class MaximumSingleEmissionsCalculateModel
 {
     /// <summary>

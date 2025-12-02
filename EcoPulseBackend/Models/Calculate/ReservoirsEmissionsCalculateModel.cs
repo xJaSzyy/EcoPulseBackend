@@ -2,6 +2,9 @@ using EcoPulseBackend.Enums;
 
 namespace EcoPulseBackend.Models.Calculate;
 
+/// <summary>
+/// Модель для расчета выбросов загрязняющих веществ от резервуаров
+/// </summary>
 public class ReservoirsEmissionsCalculateModel
 {
     /// <summary>

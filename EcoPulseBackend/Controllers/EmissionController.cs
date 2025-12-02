@@ -24,10 +24,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/gasoline-generator")]
     public IActionResult CalculateGasolineGenerator([FromBody] GasolineGeneratorEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateGasolineGeneratorEmissionsBatch(
-            new List<Pollutant> { Pollutant.CO, Pollutant.CH, Pollutant.NO2, Pollutant.NO, Pollutant.SO2 },
-            model.WorkHoursPerDay, model.WorkDaysPerYear,
-            model.GeneratorCount, model.SameGeneratorCount);
+        var result = _emissionService.CalculateGasolineGeneratorEmissionsBatch(model);
 
         return Ok(result);
     }
@@ -35,11 +32,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/reservoirs")]
     public IActionResult CalculateReservoirs([FromBody] ReservoirsEmissionsCalculateModel model)
     {
-        var vaporConcentration = DataStorage.VaporConcentration[model.ReservoirType][model.ClimateZone][model.OilProduct];
-        var result = _emissionService.CalculateReservoirsEmissionsBatch(
-            new List<Pollutant> { Pollutant.RPK240280, Pollutant.H2S }, vaporConcentration,
-            model.AutumnWinterOilAmount, model.SpringSummerOilAmount,
-            model.DrainedVolume, model.AverageDrainTime);
+        var result = _emissionService.CalculateReservoirsEmissionsBatch(model);
 
         return Ok(result.Emissions);
     }
@@ -47,7 +40,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/during-metal-machining")]
     public IActionResult CalculateDuringMetalMachining([FromBody] DuringMetalMachiningEmissionsCalculateModel model)
     { 
-        var result = _emissionService.CalculateDuringMetalMachiningEmissionsBatch(new List<Pollutant> { Pollutant.Fe2O3 }, model.MetalMachiningMachineType, model.WorkDaysPerYear);
+        var result = _emissionService.CalculateDuringMetalMachiningEmissionsBatch(model);
 
         return Ok(result);
     }
@@ -55,10 +48,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/during-welding-operations")]
     public IActionResult CalculateDuringWeldingOperations([FromBody] DuringWeldingOperationsEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateDuringWeldingOperationsEmissionsBatch(
-                new List<Pollutant> { Pollutant.Fe2O3, Pollutant.MnO2, Pollutant.FluorideGases },
-                model.ElectrodesPerYear,
-                model.WorkDaysPerYear);
+        var result = _emissionService.CalculateDuringWeldingOperationsEmissionsBatch(model);
 
         return Ok(result.Emissions);
     }
@@ -74,11 +64,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/vehicle-flow")]
     public IActionResult CalculateVehicleFlowEmissions([FromBody] VehicleFlowEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateVehicleFlowEmissionsBatch(new List<Pollutant>
-        {
-            Pollutant.CO, Pollutant.NO2, Pollutant.CH, Pollutant.Soot,
-            Pollutant.SO2, Pollutant.LeadCompounds, Pollutant.CH2O, Pollutant.C20H12
-        }, model.VehicleGroups, model.Length);
+        var result = _emissionService.CalculateVehicleFlowEmissionsBatch(model);
 
         return Ok(result);
     }
@@ -86,11 +72,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/traffic-light-queue")]
     public IActionResult CalculateTrafficLightQueueEmissions([FromBody] TrafficLightQueueEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateTrafficLightQueueEmissionsBatch(new List<Pollutant>
-        {
-            Pollutant.CO, Pollutant.NO2, Pollutant.CH, Pollutant.Soot,
-            Pollutant.SO2, Pollutant.LeadCompounds, Pollutant.CH2O, Pollutant.C20H12
-        }, model.VehicleGroups, model.TrafficLightCycles, model.TrafficLightStopTime);
+        var result = _emissionService.CalculateTrafficLightQueueEmissionsBatch(model);
 
         return Ok(result);
     }
@@ -98,63 +80,8 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/open-coal-warehouse")]
     public IActionResult CalculateOpenCoalWarehouseEmissions([FromBody] OpenCoalWarehouseEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateOpenCoalWarehouseEmissions(Pollutant.CoalDust, model.SpecificEmission,
-            model.UnloadMaterialCountPerYear, model.UnloadMaterialCountPerHour, model.DustSuppressionEfficiency);
+        var result = _emissionService.CalculateOpenCoalWarehouseEmissions(model);
 
         return Ok(result);
     }
-
-    /*[HttpPost("reports/gasoline-generator")]
-    public IActionResult GetGasolineGeneratorReport([FromBody] GasolineGeneratorEmissionsReport report)
-    {
-        report.Emissions = _emissionService.CalculateGasolineGeneratorEmissionsBatch(
-            new List<Pollutant> { Pollutant.CO, Pollutant.CH, Pollutant.NO2, Pollutant.NO, Pollutant.SO2 },
-            report.WorkHoursPerDay, report.WorkDaysPerYear,
-            report.GeneratorCount, report.SameGeneratorCount);
-
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} Бензогенератор.xlsx";
-        var stream = _exportService.CreateGasolineGeneratorEmissionsReport(report);
-
-        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-    }
-
-    [HttpPost("reports/reservoirs")]
-    public IActionResult GetReservoirsReport([FromBody] ReservoirsEmissionsReport report)
-    {
-        report.VaporConcentration = DataStorage.VaporConcentration[report.ReservoirType][report.ClimateZone][report.OilProduct];
-        report.Result = _emissionService.CalculateReservoirsEmissionsBatch(
-            new List<Pollutant> { Pollutant.RPK240280, Pollutant.H2S }, report.VaporConcentration,
-            report.AutumnWinterOilAmount, report.SpringSummerOilAmount,
-            report.DrainedVolume, report.AverageDrainTime);
-
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} Резервуары.xlsx";
-        var stream = _exportService.CreateReservoirsEmissionsReport(report);
-
-        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-    }
-
-    [HttpPost("reports/during-metal-machining")]
-    public IActionResult GetDuringMetalMachiningReport([FromBody] DuringMetalMachiningEmissionsReport report)
-    {
-        report.Result = _emissionService.CalculateDuringMetalMachiningEmissions(report.MetalMachiningMachineType, report.WorkDaysPerYear);
-
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} {report.MetalMachiningMachineType.GetDescription()}.xlsx";
-        var stream = _exportService.CreateDuringMetalMachiningEmissionsReport(report);
-
-        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-    }
-
-    [HttpPost("reports/during-welding-operations")]
-    public IActionResult GetDuringWeldingOperationsReport([FromBody] DuringWeldingOperationsEmissionsReport report)
-    {
-        report.Result = _emissionService.CalculateDuringWeldingOperationsEmissionsBatch(
-                new List<Pollutant> { Pollutant.Fe2O3, Pollutant.MnO2, Pollutant.FluorideGases },
-                report.ElectrodesPerYear,
-                report.WorkDaysPerYear);
-
-        var fileName = $"ИЗА_{report.PollutionSource}_{report.SelectionSource} Сварочный аппарат.xlsx";
-        var stream = _exportService.CreateDuringWeldingOperationsEmissionsReport(report);
-
-        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-    }*/
 }

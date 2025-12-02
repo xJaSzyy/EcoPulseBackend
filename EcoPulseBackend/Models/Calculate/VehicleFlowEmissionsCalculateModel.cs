@@ -1,5 +1,8 @@
 namespace EcoPulseBackend.Models.Calculate;
 
+/// <summary>
+/// Модель для расчета выбросов движущегося автотранспорта
+/// </summary>
 public class VehicleFlowEmissionsCalculateModel
 {
     /// <summary>
