@@ -142,23 +142,25 @@ public class Tests
         }
     }
     
-    [Test]
-    public void CalculateDuringMetalMachiningEmissionsBatch_ReturnsValidResult()
+    [TestCase(MetalMachiningMachineType.Drilling, 0.0014f, 0.001840f)]
+    [TestCase(MetalMachiningMachineType.Milling,0.0194f, 0.025492f)]
+    [TestCase(MetalMachiningMachineType.Cutting,0.0406f, 0.053348f)]
+    public void CalculateDuringMetalMachiningEmissionsBatch_ReturnsValidResult(MetalMachiningMachineType type, float maximumEmission, float grossEmission)
     {
         // Arrange
         var model = new DuringMetalMachiningEmissionsCalculateModel
         {
-            MetalMachiningMachineType = MetalMachiningMachineType.Drilling,
+            MetalMachiningMachineType = type,
             WorkDaysPerYear = 365
         };
 
         var expectedResult = new List<EmissionsResult>
         {
-            new()
+            new EmissionsResult
             {
                 PollutantInfo = new PollutantInfo { Pollutant = Pollutant.Fe2O3 },
-                MaximumEmission = 0.0014f, 
-                GrossEmission = 0.001840f
+                MaximumEmission = maximumEmission,
+                GrossEmission = grossEmission
             }
         };
 
@@ -168,6 +170,127 @@ public class Tests
         // Assert
         Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
         
+        foreach (var actual in actualResult)
+        {
+            var expected = expectedResult.FirstOrDefault(x => x.PollutantInfo.Pollutant == actual.PollutantInfo.Pollutant);
+            
+            Assert.That(expected, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That((float)Math.Round(actual.MaximumEmission, 6), Is.EqualTo(expected.MaximumEmission));
+                Assert.That((float)Math.Round(actual.GrossEmission, 6), Is.EqualTo(expected.GrossEmission));
+            });
+        }
+    }
+    
+    [Test]
+    public void CalculateDuringWeldingOperationsEmissionsBatch_ReturnsValidResult()
+    {
+        // Arrange
+        var model = new DuringWeldingOperationsEmissionsCalculateModel
+        {
+            ElectrodesPerYear = 241.36f, 
+            WorkDaysPerYear = 365
+        };
+
+        var expectedResult = new DuringWeldingOperationsEmissionsBatchResult
+        {
+            NormElectrodesPerYear = 205.16f,
+            MaterialsConsumption = 0.56f,
+            Emissions = new List<EmissionsResult>
+            {
+                new()
+                {
+                    PollutantInfo = new PollutantInfo { Pollutant = Pollutant.Fe2O3 },
+                    MaximumEmission = 0.00061f, 
+                    GrossEmission = 0.000802f
+                },
+                new()
+                {
+                    PollutantInfo = new PollutantInfo { Pollutant = Pollutant.MnO2 },
+                    MaximumEmission = 0.000108f, 
+                    GrossEmission = 0.000142f
+                },
+                new()
+                {
+                    PollutantInfo = new PollutantInfo { Pollutant = Pollutant.FluorideGases },
+                    MaximumEmission = 0.000025f, 
+                    GrossEmission = 0.000033f
+                }
+            }
+        };
+
+        // Act
+        var actualResult = _service.CalculateDuringWeldingOperationsEmissionsBatch(model);
+        
+        // Assert
+        Assert.Multiple(() =>
+        {
+
+            Assert.That(actualResult.Emissions, Has.Count.EqualTo(expectedResult.Emissions.Count));
+            Assert.That((float)Math.Round(actualResult.NormElectrodesPerYear, 2), Is.EqualTo(expectedResult.NormElectrodesPerYear));
+            Assert.That((float)Math.Round(actualResult.MaterialsConsumption, 2), Is.EqualTo(expectedResult.MaterialsConsumption));
+        });
+        
+        foreach (var actual in actualResult.Emissions)
+        {
+            var expected = expectedResult.Emissions.FirstOrDefault(x => x.PollutantInfo.Pollutant == actual.PollutantInfo.Pollutant);
+            
+            Assert.That(expected, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That((float)Math.Round(actual.MaximumEmission, 6), Is.EqualTo(expected.MaximumEmission));
+                Assert.That((float)Math.Round(actual.GrossEmission, 6), Is.EqualTo(expected.GrossEmission));
+            });
+        }
+    }
+
+    [Test]
+    public void CalculateMaximumSingleEmissions_ReturnsValidResult()
+    {
+        
+    }
+    
+    [Test]
+    public void CalculateVehicleFlowEmissionsBatch_ReturnsValidResult()
+    {
+        
+    }
+    
+    [Test]
+    public void CalculateTrafficLightQueueEmissionsBatch_ReturnsValidResult()
+    {
+        
+    }
+    
+    [Test]
+    public void CalculateOpenCoalWarehouseEmissions_ReturnsValidResult()
+    {
+        // Arrange
+        var model = new OpenCoalWarehouseEmissionsCalculateModel
+        {
+            SpecificEmission = 0.32f,
+            UnloadMaterialCountPerYear = 2700000f,
+            UnloadMaterialCountPerHour = 285.388f,
+            DustSuppressionEfficiency = 0f
+        };
+
+        var expectedResult = new List<EmissionsResult>
+        {
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CoalDust },
+                MaximumEmission = 0.075469f, 
+                GrossEmission = 1.814400f
+            }
+        };
+
+        // Act
+        var actualResult = _service.CalculateOpenCoalWarehouseEmissions(model);
+
+        // Assert
+        Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
+
         foreach (var actual in actualResult)
         {
             var expected = expectedResult.FirstOrDefault(x => x.PollutantInfo.Pollutant == actual.PollutantInfo.Pollutant);
