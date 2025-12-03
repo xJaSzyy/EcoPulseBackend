@@ -248,19 +248,209 @@ public class Tests
     [Test]
     public void CalculateMaximumSingleEmissions_ReturnsValidResult()
     {
-        
+        // Arrange
+        var model = new MaximumSingleEmissionsCalculateModel
+        {
+            Pollutant = Pollutant.SP,
+            EjectedTemp = 235,
+            AirTemp = -40,
+            AvgExitSpeed = 15,
+            HeightSource = 13,
+            DiameterSource = 1,
+            TempStratificationRatio = CoefficientRegion.CentralRegions,
+            SedimentationRateRatio = CoefficientDegreePurification.Medium,
+            Distance = 15,
+            MaxCount = 3
+        };
+
+        var expectedResult = new EmissionsGroupResult
+        {
+            PollutantInfo = new PollutantInfo { Pollutant = Pollutant.SP },
+            Emissions = new List<EmissionsResult>
+            {
+                new()
+                {
+                    MaximumEmission = 0.006019f
+                },
+                new()
+                {
+                    MaximumEmission = 0.023284f
+                },
+                new()
+                {
+                    MaximumEmission = 0.050637f
+                }
+            }
+        };
+
+        // Act
+        var actualResult = _service.CalculateMaximumSingleEmissions(model);
+
+        // Assert
+        Assert.That(actualResult.Emissions, Has.Count.EqualTo(expectedResult.Emissions.Count));
+
+        foreach (var actual in actualResult.Emissions)
+        {
+            var expected = expectedResult.Emissions[actualResult.Emissions.IndexOf(actual)];
+            
+            Assert.That(expected, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That((float)Math.Round(actual.MaximumEmission, 6), Is.EqualTo(expected.MaximumEmission));
+            });
+        }
     }
     
     [Test]
     public void CalculateVehicleFlowEmissionsBatch_ReturnsValidResult()
     {
+        // Arrange
+        var model = new VehicleFlowEmissionsCalculateModel
+        {
+            VehicleGroups = new List<VehicleGroup>
+            {
+                new()
+                {
+                    VehicleType = VehicleType.Passenger,
+                    AverageSpeed = 90,
+                    MaxTrafficIntensity = 3
+                }
+            },
+            Length = 123
+        };
         
+        var expectedResult = new List<EmissionsResult>
+        {
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.LeadCompounds },
+                MaximumEmission = 0.001265875f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.NO2 },
+                MaximumEmission = 0.119924985f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.SO2 },
+                MaximumEmission = 0.004330625f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CO },
+                MaximumEmission = 1.265875f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.C20H12 },
+                MaximumEmission = 1.132625e-7f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CH2O },
+                MaximumEmission = 0.00039974996f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CH },
+                MaximumEmission = 0.1399125f
+            }
+        };
+
+        // Act
+        var actualResult = _service.CalculateVehicleFlowEmissionsBatch(model);
+
+        // Assert
+        Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
+
+        foreach (var actual in actualResult)
+        {
+            var expected = expectedResult.FirstOrDefault(x => x.PollutantInfo.Pollutant == actual.PollutantInfo.Pollutant);
+            
+            Assert.That(expected, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual.MaximumEmission, Is.EqualTo(expected.MaximumEmission));
+                Assert.That(actual.GrossEmission, Is.EqualTo(expected.GrossEmission));
+            });
+        }
     }
     
     [Test]
     public void CalculateTrafficLightQueueEmissionsBatch_ReturnsValidResult()
     {
+        // Arrange
+        var model = new TrafficLightQueueEmissionsCalculateModel
+        {
+            VehicleGroups = new List<VehicleGroupQueue>
+            {
+                new()
+                {
+                    VehicleType = VehicleType.Passenger,
+                    VehiclesCount = 12
+                }
+            },
+            TrafficLightCycles = 20,
+            TrafficLightStopTime = 60f
+        };
         
+        var expectedResult = new List<EmissionsResult>
+        {
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.LeadCompounds },
+                MaximumEmission = 1.58399999f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.NO2 },
+                MaximumEmission = 18.0f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.SO2 },
+                MaximumEmission = 3.5999999f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CO },
+                MaximumEmission = 1260.0f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.C20H12 },
+                MaximumEmission = 0.000720000011f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CH2O },
+                MaximumEmission = 0.287999988f
+            },
+            new()
+            {
+                PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CH },
+                MaximumEmission = 90.0f
+            }
+        };
+
+        // Act
+        var actualResult = _service.CalculateTrafficLightQueueEmissionsBatch(model);
+
+        // Assert
+        Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
+
+        foreach (var actual in actualResult)
+        {
+            var expected = expectedResult.FirstOrDefault(x => x.PollutantInfo.Pollutant == actual.PollutantInfo.Pollutant);
+            
+            Assert.That(expected, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual.MaximumEmission, Is.EqualTo(expected.MaximumEmission));
+                Assert.That(actual.GrossEmission, Is.EqualTo(expected.GrossEmission));
+            });
+        }
     }
     
     [Test]
