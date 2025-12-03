@@ -24,4 +24,19 @@ public class OpenCoalWarehouseEmissionsCalculateModel
     /// Эффективность применяемого средства пылеподавления, дол. ед.
     /// </summary>
     public float DustSuppressionEfficiency { get; set; }
+    
+    /// <summary>
+    /// Площадь основания штабеля угля, м2
+    /// </summary>
+    public float CoalPileBaseArea { get; set; }
+        
+    /// <summary>
+    /// Количество дней с устойчивым снежным покровом
+    /// </summary>
+    public int SnowyDaysCount { get; set; }
+    
+    /// <summary>
+    /// Количество дней  с осадками в виде дождя
+    /// </summary>
+    public int RainyDaysCount { get; set; } 
 }

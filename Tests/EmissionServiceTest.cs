@@ -272,7 +272,10 @@ public class Tests
             SpecificEmission = 0.32f,
             UnloadMaterialCountPerYear = 2700000f,
             UnloadMaterialCountPerHour = 285.388f,
-            DustSuppressionEfficiency = 0f
+            DustSuppressionEfficiency = 0f,
+            CoalPileBaseArea = 1700f,
+            SnowyDaysCount = 162,
+            RainyDaysCount = 89
         };
 
         var expectedResult = new List<EmissionsResult>
@@ -280,8 +283,8 @@ public class Tests
             new()
             {
                 PollutantInfo = new PollutantInfo { Pollutant = Pollutant.CoalDust },
-                MaximumEmission = 0.075469f, 
-                GrossEmission = 1.814400f
+                MaximumEmission = 0.368804f, 
+                GrossEmission = 3.853858f
             }
         };
 
