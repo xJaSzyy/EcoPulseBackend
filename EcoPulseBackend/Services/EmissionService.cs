@@ -169,6 +169,23 @@ public class EmissionService : IEmissionService
 
         return new List<EmissionsResult> { result };
     }
+    
+    public DangerZoneParameters CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model)
+    {
+        var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == model.Pollutant);
+
+        if (!pollutantInfo.Mass.HasValue)
+        {
+            return new DangerZoneParameters();
+        }
+        
+        Setup(model);
+        
+        var distances = Enumerable.Range(1, model.Distance / 5).Select(i => i * 5f).ToList();
+        
+        var concentrations = GetNormalSurfaceConcentration(distances, (float)pollutantInfo.Mass);
+        return CalculateDangerZoneParameters(concentrations, (float)pollutantInfo.Mass, model.WindSpeed);
+    }
 
     #region Private
 
@@ -508,6 +525,80 @@ public class EmissionService : IEmissionService
         };
         
         return result;
+    }
+    
+    private DangerZoneParameters CalculateDangerZoneParameters(List<float> concentrations, float mass, float windSpeed)
+    {
+        var maxIndex = int.MinValue;
+        var maxDistance = double.MinValue;
+        var minDistance = double.MinValue;
+
+        var valuesUpMax = new List<double>();
+        
+        var maxConcentration = concentrations.Max();
+        for (var i = 0; i < concentrations.Count; i++)
+        {
+            valuesUpMax.Add(concentrations[i]);
+
+            if (Math.Abs(maxConcentration - concentrations[i]) < 0.01f)
+            {
+                maxIndex = i;
+                maxDistance = (i + 1) * 5;
+                break;
+            }
+        }
+
+        double med;
+
+        valuesUpMax.Sort();
+        
+        if (valuesUpMax.Count % 2 == 0)
+        {
+            med = (valuesUpMax[(valuesUpMax.Count / 2)] + valuesUpMax[(valuesUpMax.Count / 2) - 1]) / 2;
+        }
+        else
+        {
+            med = valuesUpMax[(valuesUpMax.Count / 2)];
+        }
+
+        for (var i = maxIndex; i < concentrations.Count; i++)
+        {
+            if (concentrations[i] < med)
+            {
+                minDistance = (i + 1) * 5;
+                break;
+            }
+        }
+
+        const float windAverageSpeed = 3;
+        
+        var windSpeedCoeff =  windSpeed != 0  ? windAverageSpeed / windSpeed : windAverageSpeed;
+        
+        var dangerZoneLength = (minDistance / Math.Sqrt(Math.Sqrt(mass))) * (1 / windSpeedCoeff);
+        var dangerZoneWidth = Math.Round((minDistance - maxDistance) * 2 * windSpeedCoeff, 2) * Math.Sqrt(mass);
+
+        var sortedConcentrations = concentrations.OrderByDescending(c => c).Take(5).ToList();
+        var avgConcentration = sortedConcentrations.Average();
+        
+        var pm = avgConcentration * 1000;
+
+        var colorHex = DataStorage.ColorMap[225.4];
+        foreach (var pair in DataStorage.ColorMap)
+        {
+            if (pm <= pair.Key)
+            {
+                colorHex = pair.Value;
+                break;
+            }
+        }
+        
+        return new DangerZoneParameters()
+        {
+            Length = dangerZoneLength,
+            Width = dangerZoneWidth,
+            Color = colorHex,
+            AverageConcentration = avgConcentration
+        };
     }
 
     #endregion

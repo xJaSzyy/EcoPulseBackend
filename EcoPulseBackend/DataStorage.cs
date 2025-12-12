@@ -447,4 +447,13 @@ public static class DataStorage
     
         return nearest.Key == 0 ? SpeedCorrectionFactors.Values.Last() : nearest.Value;
     }
+    
+    public static readonly SortedDictionary<double, string> ColorMap = new()
+    {
+        { 225.4, "rgba(164, 125, 184, 0.6)" },
+        { 125.4, "rgba(246, 104, 106, 0.6)" },
+        { 55.4, "rgba(251, 153, 86, 0.6)" },
+        { 35.4, "rgba(248, 212, 97, 0.6)" },
+        { 9.0, "rgba(171, 209, 98, 0.6)" }
+    };
 }

@@ -61,4 +61,11 @@ public interface IEmissionService
     /// <param name="model">Модель для расчета выбросов угольной пыли в атмосферу от открытых складов угля</param>
     /// <returns></returns>
     public List<EmissionsResult> CalculateOpenCoalWarehouseEmissions(OpenCoalWarehouseEmissionsCalculateModel model);
+
+    /// <summary>
+    /// Расчет зоны выброса от одиночного точечного источника
+    /// </summary>
+    /// <param name="model">Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника</param>
+    /// <returns></returns>
+    public DangerZoneParameters CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model);
 }

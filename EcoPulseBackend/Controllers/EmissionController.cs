@@ -54,7 +54,7 @@ public class EmissionController : ControllerBase
     }
     
     [HttpPost("calculate/maximum-single")]
-    public IActionResult CalculateMaximumSingle([FromBody] MaximumSingleEmissionsCalculateModel model)
+    public IActionResult CalculateMaximumSingleEmissions([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
         var result = _emissionService.CalculateMaximumSingleEmissions(model);
 
@@ -81,6 +81,14 @@ public class EmissionController : ControllerBase
     public IActionResult CalculateOpenCoalWarehouseEmissions([FromBody] OpenCoalWarehouseEmissionsCalculateModel model)
     {
         var result = _emissionService.CalculateOpenCoalWarehouseEmissions(model);
+
+        return Ok(result);
+    }
+    
+    [HttpPost("calculate/maximum-single-danger-zone")]
+    public IActionResult CalculateMaximumSingleEmissionsDangerZone([FromBody] MaximumSingleEmissionsCalculateModel model)
+    {
+        var result = _emissionService.CalculateMaximumSingleEmissionsDangerZone(model);
 
         return Ok(result);
     }
