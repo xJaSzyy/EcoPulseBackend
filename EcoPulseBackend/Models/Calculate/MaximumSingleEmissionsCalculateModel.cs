@@ -28,19 +28,19 @@ public class MaximumSingleEmissionsCalculateModel
     /// <summary>
     /// Средняя скорость выхода ГВС из устья источника выброса, м/с
     /// </summary>
-    [Range(15, 25)]
+    [Range(15, 30)]
     public float AvgExitSpeed { get; set; }
 
     /// <summary>
     /// Высота источника выброса, м.
     /// </summary>
-    [Range(13, 65)]
+    [Range(13, 150)]
     public float HeightSource { get; set; }
 
     /// <summary>
     /// Диаметр устья источника, м.
     /// </summary>
-    [Range(1, 7)]
+    [Range(1, 10)]
     public float DiameterSource { get; set; }
 
     /// <summary>
@@ -67,6 +67,5 @@ public class MaximumSingleEmissionsCalculateModel
     /// <summary>
     /// Количество максимальных точек
     /// </summary>
-    [Range(1, 10000)]
     public int MaxCount { get; set; }
 }

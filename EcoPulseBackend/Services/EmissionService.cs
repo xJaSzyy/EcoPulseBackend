@@ -540,7 +540,7 @@ public class EmissionService : IEmissionService
         {
             valuesUpMax.Add(concentrations[i]);
 
-            if (Math.Abs(maxConcentration - concentrations[i]) < 0.01f)
+            if (maxConcentration == concentrations[i])
             {
                 maxIndex = i;
                 maxDistance = (i + 1) * 5;
@@ -570,8 +570,8 @@ public class EmissionService : IEmissionService
             }
         }
 
-        const float windAverageSpeed = 3;
-        
+        const int windAverageSpeed = 3;
+
         var windSpeedCoeff =  windSpeed != 0  ? windAverageSpeed / windSpeed : windAverageSpeed;
         
         var dangerZoneLength = (minDistance / Math.Sqrt(Math.Sqrt(mass))) * (1 / windSpeedCoeff);
@@ -582,12 +582,12 @@ public class EmissionService : IEmissionService
         
         var pm = avgConcentration * 1000;
 
-        var colorHex = DataStorage.ColorMap[225.4];
+        var color = DataStorage.ColorMap[225.4];
         foreach (var pair in DataStorage.ColorMap)
         {
             if (pm <= pair.Key)
             {
-                colorHex = pair.Value;
+                color = pair.Value;
                 break;
             }
         }
@@ -596,7 +596,7 @@ public class EmissionService : IEmissionService
         {
             Length = dangerZoneLength,
             Width = dangerZoneWidth,
-            Color = colorHex,
+            Color = color,
             AverageConcentration = avgConcentration
         };
     }
