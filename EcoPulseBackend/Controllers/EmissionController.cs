@@ -2,6 +2,7 @@ using EcoPulseBackend.Enums;
 using EcoPulseBackend.Interfaces;
 using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.Calculate;
+using EcoPulseBackend.Models.DangerZone;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcoPulseBackend.Controllers;
@@ -89,6 +90,86 @@ public class EmissionController : ControllerBase
     public IActionResult CalculateMaximumSingleEmissionsDangerZone([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
         var result = _emissionService.CalculateMaximumSingleEmissionsDangerZone(model);
+
+        return Ok(result);
+    }
+    
+    [HttpPost("calculate/danger-zones")]
+    public IActionResult CalculateDangerZones([FromBody] DangerZoneCalculateModel model)
+    {
+        var emissionSources = new List<EmissionSource>
+        {
+            new()
+            {
+                Lon = 85.99424f,
+                Lat = 55.347918f,
+                EjectedTemp = 255,
+                AvgExitSpeed = 30,
+                HeightSource = 100,
+                DiameterSource = 4,
+                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
+                SedimentationRateRatio = CoefficientDegreePurification.Low,
+            },
+            new()
+            {
+                Lon = 86.068655f,
+                Lat = 55.363112f,
+                EjectedTemp = 245,
+                AvgExitSpeed = 19,
+                HeightSource = 120,
+                DiameterSource = 3,
+                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
+                SedimentationRateRatio = CoefficientDegreePurification.Low,
+            },
+            new()
+            {
+                Lon = 86.035864f,
+                Lat = 55.365342f,
+                EjectedTemp = 255,
+                AvgExitSpeed = 15,
+                HeightSource = 80,
+                DiameterSource = 2,
+                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
+                SedimentationRateRatio = CoefficientDegreePurification.Low,
+            },
+            new()
+            {
+                Lon = 86.076927f,
+                Lat = 55.390792f,
+                EjectedTemp = 265,
+                AvgExitSpeed = 30,
+                HeightSource = 60,
+                DiameterSource = 6,
+                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
+                SedimentationRateRatio = CoefficientDegreePurification.Low,
+            }
+        };
+
+        var result = new List<DangerZoneParameters>();
+        
+        foreach (var emissionSource in emissionSources)
+        {
+            var calculateModel = new MaximumSingleEmissionsCalculateModel
+            {
+                Pollutant = model.Pollutant,
+                EjectedTemp =  emissionSource.EjectedTemp,
+                AirTemp = model.AirTemp,
+                AvgExitSpeed = emissionSource.AvgExitSpeed,
+                HeightSource = emissionSource.HeightSource,
+                DiameterSource = emissionSource.DiameterSource,
+                TempStratificationRatio = emissionSource.TempStratificationRatio,
+                SedimentationRateRatio = emissionSource.SedimentationRateRatio,
+                WindSpeed = model.WindSpeed,
+                Distance = 10000
+            };
+
+            var dangerZoneParameters = _emissionService.CalculateMaximumSingleEmissionsDangerZone(calculateModel);
+            dangerZoneParameters.Lon = emissionSource.Lon;
+            dangerZoneParameters.Lat = emissionSource.Lat;
+            dangerZoneParameters.Angle = model.WindDirection;
+            
+            result.Add(dangerZoneParameters);
+        }
 
         return Ok(result);
     }

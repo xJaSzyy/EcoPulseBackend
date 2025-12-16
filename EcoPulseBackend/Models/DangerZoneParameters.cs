@@ -6,6 +6,16 @@
 public class DangerZoneParameters
 {
     /// <summary>
+    /// Долгота
+    /// </summary>
+    public float Lon { get; set; }
+    
+    /// <summary>
+    /// Широта
+    /// </summary>
+    public float Lat { get; set; }
+    
+    /// <summary>
     /// Длина зоны выброса
     /// </summary>
     public double Length { get; set; }
@@ -23,5 +33,10 @@ public class DangerZoneParameters
     /// <summary>
     /// Среднее значение из n макисмальных концентраций
     /// </summary>
-    public double AverageConcentration { get; set; }
+    public float AverageConcentration { get; set; }
+    
+    /// <summary>
+    /// Угол направления
+    /// </summary>
+    public double Angle { get; set; }
 }
