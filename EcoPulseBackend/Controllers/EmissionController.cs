@@ -1,4 +1,4 @@
-using EcoPulseBackend.Enums;
+using EcoPulseBackend.Contexts;
 using EcoPulseBackend.Interfaces;
 using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.Calculate;
@@ -11,14 +11,13 @@ namespace EcoPulseBackend.Controllers;
 public class EmissionController : ControllerBase
 {
     private readonly IEmissionService _emissionService;
-    private readonly IExportService _exportService;
+    private readonly ApplicationDbContext _dbContext;
     private readonly ILogger<EmissionController> _logger;
 
-    public EmissionController(ILogger<EmissionController> logger, IEmissionService emissionService,
-        IExportService exportService)
+    public EmissionController(IEmissionService emissionService, ApplicationDbContext dbContext, ILogger<EmissionController> logger)
     {
         _emissionService = emissionService;
-        _exportService = exportService;
+        _dbContext = dbContext;
         _logger = logger;
     }
     
@@ -97,53 +96,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/danger-zones")]
     public IActionResult CalculateDangerZones([FromBody] DangerZoneCalculateModel model)
     {
-        var emissionSources = new List<EmissionSource>
-        {
-            new()
-            {
-                Lon = 85.99424f,
-                Lat = 55.347918f,
-                EjectedTemp = 255,
-                AvgExitSpeed = 30,
-                HeightSource = 100,
-                DiameterSource = 4,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            },
-            new()
-            {
-                Lon = 86.068655f,
-                Lat = 55.363112f,
-                EjectedTemp = 245,
-                AvgExitSpeed = 19,
-                HeightSource = 120,
-                DiameterSource = 3,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            },
-            new()
-            {
-                Lon = 86.035864f,
-                Lat = 55.365342f,
-                EjectedTemp = 255,
-                AvgExitSpeed = 15,
-                HeightSource = 80,
-                DiameterSource = 2,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            },
-            new()
-            {
-                Lon = 86.076927f,
-                Lat = 55.390792f,
-                EjectedTemp = 265,
-                AvgExitSpeed = 30,
-                HeightSource = 60,
-                DiameterSource = 6,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            }
-        };
+        var emissionSources = _dbContext.EmissionSources.ToList();
 
         var result = new List<DangerZoneParameters>();
         

@@ -9,6 +9,12 @@ namespace EcoPulseBackend.Models;
 public class EmissionSource
 {
     /// <summary>
+    /// Идентификатор
+    /// </summary>
+    [Key]
+    public int Id { get; set; }
+    
+    /// <summary>
     /// Долгота
     /// </summary>
     public float Lon { get; set; }
