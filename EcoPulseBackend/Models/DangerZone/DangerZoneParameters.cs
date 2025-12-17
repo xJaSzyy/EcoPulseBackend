@@ -6,6 +6,11 @@
 public class DangerZoneParameters
 {
     /// <summary>
+    /// Идентификатор источника выброса
+    /// </summary>
+    public int EmissionSourceId { get; set; }
+    
+    /// <summary>
     /// Долгота
     /// </summary>
     public float Lon { get; set; }

@@ -92,7 +92,7 @@ public class EmissionController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("calculate/maximum-single-danger-zone")]
+    [HttpPost("calculate/danger-zone")]
     public IActionResult CalculateMaximumSingleEmissionsDangerZone([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
         var result = _emissionService.CalculateMaximumSingleEmissionsDangerZone(model);
@@ -124,6 +124,7 @@ public class EmissionController : ControllerBase
             };
 
             var dangerZoneParameters = _emissionService.CalculateMaximumSingleEmissionsDangerZone(calculateModel);
+            dangerZoneParameters.EmissionSourceId = emissionSource.Id;
             dangerZoneParameters.Lon = emissionSource.Lon;
             dangerZoneParameters.Lat = emissionSource.Lat;
             dangerZoneParameters.Angle = model.WindDirection;

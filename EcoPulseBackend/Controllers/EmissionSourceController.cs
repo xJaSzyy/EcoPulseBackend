@@ -43,6 +43,19 @@ public class EmissionSourceController : ControllerBase
         return Ok(result);
     } 
     
+    [HttpGet("/emissionSource/{id:int}")]
+    public IActionResult GetEmissionSourceById(int id)
+    {
+        var result = _dbContext.EmissionSources.FirstOrDefault(s => s.Id == id);
+
+        if (result == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(result);
+    } 
+    
     [HttpPut("/emissionSource")]
     public async Task<IActionResult> UpdateEmissionSource([FromBody] EmissionSourceUpdateModel model)
     {
