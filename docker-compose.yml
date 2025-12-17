@@ -1,0 +1,40 @@
+﻿version: "3.8"
+
+services:
+  ecopulse:
+    container_name: ecopulse_api
+    build:
+      context: .
+      dockerfile: EcoPulseBackend/Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_URLS: http://+:5000
+      ASPNETCORE_ENVIRONMENT: ${ENV}
+      ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
+    networks:
+      - test
+  
+  postgres:
+    container_name: ecopulse_db
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - test
+
+networks:
+  test:
+    driver: bridge
+
+volumes:
+  db_data:
