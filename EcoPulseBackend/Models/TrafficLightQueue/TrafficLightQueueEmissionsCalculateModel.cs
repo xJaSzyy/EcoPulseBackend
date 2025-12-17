@@ -1,4 +1,4 @@
-namespace EcoPulseBackend.Models.Calculate;
+namespace EcoPulseBackend.Models.TrafficLightQueue;
 
 /// <summary>
 /// Модель для расчета выбросов автотранспорта в районе регулируемого перекрестка

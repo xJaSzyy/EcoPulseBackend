@@ -1,4 +1,4 @@
-﻿using EcoPulseBackend.Models;
+﻿using EcoPulseBackend.Models.EmissionSource;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcoPulseBackend.Contexts;

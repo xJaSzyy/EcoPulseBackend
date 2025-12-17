@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using EcoPulseBackend.Enums;
 
-namespace EcoPulseBackend.Models.Calculate;
+namespace EcoPulseBackend.Models.MaximumSingle;
 
 /// <summary>
 /// Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EcoPulseBackend.Enums;
 
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.EmissionSource;
 
 /// <summary>
 /// Источник выброса

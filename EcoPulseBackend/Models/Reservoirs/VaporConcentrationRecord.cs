@@ -1,4 +1,4 @@
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.Reservoirs;
 
 /// <summary>
 /// Концентрация паров нефтепродуктов в выбросах паровоздушной смеси при заполнении резервуаров и баков автомашин

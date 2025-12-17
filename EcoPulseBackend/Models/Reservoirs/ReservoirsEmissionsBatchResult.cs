@@ -1,4 +1,4 @@
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.Reservoirs;
 
 public class ReservoirsEmissionsBatchResult
 {

@@ -1,6 +1,6 @@
 using EcoPulseBackend.Enums;
 
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.VehicleFlow;
 
 public class VehicleGroup
 {

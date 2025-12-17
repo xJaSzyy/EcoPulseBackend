@@ -1,6 +1,6 @@
 using EcoPulseBackend.Enums;
 
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.DuringMetalMachining;
 
 /// <summary>
 /// Отчет по расчету выбросов ЗВ при механической обработке металлов (входные + выходные данные)

@@ -1,4 +1,4 @@
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.DuringWeldingOperations;
 
 /// <summary>
 /// Отчет по расчету выбросов ЗВ при сварочных работах (входные + выходные данные)
