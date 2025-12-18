@@ -1,13 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EcoPulseBackend.Enums;
 
-namespace EcoPulseBackend.Models.EmissionSource;
+namespace EcoPulseBackend.Models.SingleEmissionSource;
 
 /// <summary>
-/// Модель добавления источника выброса
+/// Модель изменения источника выброса
 /// </summary>
-public class EmissionSourceAddModel
+public class SingleEmissionSourceUpdateModel
 {
+    /// <summary>
+    /// Идентификатор
+    /// </summary>
+    public int Id { get; set; }
+    
     /// <summary>
     /// Долгота
     /// </summary>

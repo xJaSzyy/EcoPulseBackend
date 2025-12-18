@@ -1,5 +1,5 @@
 ﻿using EcoPulseBackend.Contexts;
-using EcoPulseBackend.Models.EmissionSource;
+using EcoPulseBackend.Models.SingleEmissionSource;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcoPulseBackend.Controllers;
@@ -14,10 +14,10 @@ public class EmissionSourceController : ControllerBase
         _dbContext = dbContext;
     }
 
-    [HttpPost("/emissionSource")]
-    public async Task<IActionResult> AddEmissionSource([FromBody] EmissionSourceAddModel model)
+    [HttpPost("/emissionSource/single")]
+    public async Task<IActionResult> AddSingleEmissionSource([FromBody] SingleEmissionSourceAddModel model)
     {
-        var emissionSource = new EmissionSource
+        var emissionSource = new SingleEmissionSource
         {
             Lon = model.Lon,
             Lat = model.Lat,
@@ -29,24 +29,16 @@ public class EmissionSourceController : ControllerBase
             SedimentationRateRatio = model.SedimentationRateRatio
         };
         
-        _dbContext.EmissionSources.Add(emissionSource);
+        _dbContext.SingleEmissionSources.Add(emissionSource);
         await _dbContext.SaveChangesAsync();
         
         return Ok(emissionSource);
     }
-
-    [HttpGet("/emissionSource")]
-    public IActionResult GetAllEmissionSources()
-    {
-        var result = _dbContext.EmissionSources.ToList();
-
-        return Ok(result);
-    } 
     
-    [HttpGet("/emissionSource/{id:int}")]
-    public IActionResult GetEmissionSourceById(int id)
+    [HttpGet("/emissionSource/single/{id:int}")]
+    public IActionResult GetSingleEmissionSourceById(int id)
     {
-        var result = _dbContext.EmissionSources.FirstOrDefault(s => s.Id == id);
+        var result = _dbContext.SingleEmissionSources.FirstOrDefault(s => s.Id == id);
 
         if (result == null)
         {
@@ -56,10 +48,10 @@ public class EmissionSourceController : ControllerBase
         return Ok(result);
     } 
     
-    [HttpPut("/emissionSource")]
-    public async Task<IActionResult> UpdateEmissionSource([FromBody] EmissionSourceUpdateModel model)
+    [HttpPut("/emissionSource/single")]
+    public async Task<IActionResult> UpdateSingleEmissionSource([FromBody] SingleEmissionSourceUpdateModel model)
     {
-        var emissionSource = _dbContext.EmissionSources.FirstOrDefault(s => s.Id == model.Id);
+        var emissionSource = _dbContext.SingleEmissionSources.FirstOrDefault(s => s.Id == model.Id);
 
         if (emissionSource == null)
         {
@@ -75,23 +67,23 @@ public class EmissionSourceController : ControllerBase
         emissionSource.TempStratificationRatio = model.TempStratificationRatio;
         emissionSource.SedimentationRateRatio = model.SedimentationRateRatio;
         
-        _dbContext.EmissionSources.Update(emissionSource);
+        _dbContext.SingleEmissionSources.Update(emissionSource);
         await _dbContext.SaveChangesAsync();
         
         return Ok(emissionSource);
     }
     
-    [HttpDelete("/emissionSource/{id:int}")]
-    public async Task<IActionResult> DeleteEmissionSource(int id)
+    [HttpDelete("/emissionSource/single/{id:int}")]
+    public async Task<IActionResult> DeleteSingleEmissionSource(int id)
     {
-        var emissionSource = _dbContext.EmissionSources.FirstOrDefault(s => s.Id == id);
+        var emissionSource = _dbContext.SingleEmissionSources.FirstOrDefault(s => s.Id == id);
 
         if (emissionSource == null)
         {
             return NotFound();
         }
         
-        _dbContext.EmissionSources.Remove(emissionSource);
+        _dbContext.SingleEmissionSources.Remove(emissionSource);
         await _dbContext.SaveChangesAsync();
         
         return Ok(emissionSource);

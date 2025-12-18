@@ -103,7 +103,7 @@ public class EmissionController : ControllerBase
     [HttpPost("calculate/maximum-single/danger-zones")]
     public IActionResult CalculateDangerZones([FromBody] DangerZoneCalculateModel model)
     {
-        var emissionSources = _dbContext.EmissionSources.ToList();
+        var emissionSources = _dbContext.SingleEmissionSources.ToList();
 
         var result = new List<DangerZoneParameters>();
         
