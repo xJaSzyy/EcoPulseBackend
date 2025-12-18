@@ -92,15 +92,15 @@ public class EmissionController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("calculate/danger-zone")]
+    [HttpPost("calculate/maximum-single/danger-zone")]
     public IActionResult CalculateMaximumSingleEmissionsDangerZone([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
         var result = _emissionService.CalculateMaximumSingleEmissionsDangerZone(model);
-
+        
         return Ok(result);
     }
     
-    [HttpPost("calculate/danger-zones")]
+    [HttpPost("calculate/maximum-single/danger-zones")]
     public IActionResult CalculateDangerZones([FromBody] DangerZoneCalculateModel model)
     {
         var emissionSources = _dbContext.EmissionSources.ToList();
