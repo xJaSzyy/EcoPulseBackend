@@ -1,7 +1,15 @@
 using EcoPulseBackend.Enums;
 using EcoPulseBackend.Interfaces;
 using EcoPulseBackend.Models;
-using EcoPulseBackend.Models.Calculate;
+using EcoPulseBackend.Models.DangerZone;
+using EcoPulseBackend.Models.DuringMetalMachining;
+using EcoPulseBackend.Models.DuringWeldingOperations;
+using EcoPulseBackend.Models.GasolineGenerator;
+using EcoPulseBackend.Models.MaximumSingle;
+using EcoPulseBackend.Models.OpenCoalWarehouse;
+using EcoPulseBackend.Models.Reservoirs;
+using EcoPulseBackend.Models.TrafficLightQueue;
+using EcoPulseBackend.Models.VehicleFlow;
 
 namespace EcoPulseBackend.Services;
 
@@ -577,7 +585,7 @@ public class EmissionService : IEmissionService
         var dangerZoneLength = (minDistance / Math.Sqrt(Math.Sqrt(mass))) * (1 / windSpeedCoeff);
         var dangerZoneWidth = Math.Round((minDistance - maxDistance) * 2 * windSpeedCoeff, 2) * Math.Sqrt(mass);
 
-        var sortedConcentrations = concentrations.OrderByDescending(c => c).Take(5).ToList();
+        var sortedConcentrations = concentrations.OrderByDescending(c => c).Take(100).ToList();
         var avgConcentration = sortedConcentrations.Average();
         
         var pm = avgConcentration * 1000;

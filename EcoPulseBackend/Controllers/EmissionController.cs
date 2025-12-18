@@ -1,8 +1,15 @@
-using EcoPulseBackend.Enums;
+using EcoPulseBackend.Contexts;
 using EcoPulseBackend.Interfaces;
 using EcoPulseBackend.Models;
-using EcoPulseBackend.Models.Calculate;
 using EcoPulseBackend.Models.DangerZone;
+using EcoPulseBackend.Models.DuringMetalMachining;
+using EcoPulseBackend.Models.DuringWeldingOperations;
+using EcoPulseBackend.Models.GasolineGenerator;
+using EcoPulseBackend.Models.MaximumSingle;
+using EcoPulseBackend.Models.OpenCoalWarehouse;
+using EcoPulseBackend.Models.Reservoirs;
+using EcoPulseBackend.Models.TrafficLightQueue;
+using EcoPulseBackend.Models.VehicleFlow;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcoPulseBackend.Controllers;
@@ -11,14 +18,13 @@ namespace EcoPulseBackend.Controllers;
 public class EmissionController : ControllerBase
 {
     private readonly IEmissionService _emissionService;
-    private readonly IExportService _exportService;
+    private readonly ApplicationDbContext _dbContext;
     private readonly ILogger<EmissionController> _logger;
 
-    public EmissionController(ILogger<EmissionController> logger, IEmissionService emissionService,
-        IExportService exportService)
+    public EmissionController(IEmissionService emissionService, ApplicationDbContext dbContext, ILogger<EmissionController> logger)
     {
         _emissionService = emissionService;
-        _exportService = exportService;
+        _dbContext = dbContext;
         _logger = logger;
     }
     
@@ -86,64 +92,18 @@ public class EmissionController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("calculate/maximum-single-danger-zone")]
+    [HttpPost("calculate/maximum-single/danger-zone")]
     public IActionResult CalculateMaximumSingleEmissionsDangerZone([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
         var result = _emissionService.CalculateMaximumSingleEmissionsDangerZone(model);
-
+        
         return Ok(result);
     }
     
-    [HttpPost("calculate/danger-zones")]
+    [HttpPost("calculate/maximum-single/danger-zones")]
     public IActionResult CalculateDangerZones([FromBody] DangerZoneCalculateModel model)
     {
-        var emissionSources = new List<EmissionSource>
-        {
-            new()
-            {
-                Lon = 85.99424f,
-                Lat = 55.347918f,
-                EjectedTemp = 255,
-                AvgExitSpeed = 30,
-                HeightSource = 100,
-                DiameterSource = 4,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            },
-            new()
-            {
-                Lon = 86.068655f,
-                Lat = 55.363112f,
-                EjectedTemp = 245,
-                AvgExitSpeed = 19,
-                HeightSource = 120,
-                DiameterSource = 3,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            },
-            new()
-            {
-                Lon = 86.035864f,
-                Lat = 55.365342f,
-                EjectedTemp = 255,
-                AvgExitSpeed = 15,
-                HeightSource = 80,
-                DiameterSource = 2,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            },
-            new()
-            {
-                Lon = 86.076927f,
-                Lat = 55.390792f,
-                EjectedTemp = 265,
-                AvgExitSpeed = 30,
-                HeightSource = 60,
-                DiameterSource = 6,
-                TempStratificationRatio = CoefficientRegion.BuryatiaOrTransBaikal,
-                SedimentationRateRatio = CoefficientDegreePurification.Low,
-            }
-        };
+        var emissionSources = _dbContext.EmissionSources.ToList();
 
         var result = new List<DangerZoneParameters>();
         
@@ -164,6 +124,7 @@ public class EmissionController : ControllerBase
             };
 
             var dangerZoneParameters = _emissionService.CalculateMaximumSingleEmissionsDangerZone(calculateModel);
+            dangerZoneParameters.EmissionSourceId = emissionSource.Id;
             dangerZoneParameters.Lon = emissionSource.Lon;
             dangerZoneParameters.Lat = emissionSource.Lat;
             dangerZoneParameters.Angle = model.WindDirection;

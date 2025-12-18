@@ -1,5 +1,6 @@
 using EcoPulseBackend.Enums;
 using EcoPulseBackend.Models;
+using EcoPulseBackend.Models.Reservoirs;
 
 namespace EcoPulseBackend;
 

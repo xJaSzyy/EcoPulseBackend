@@ -1,29 +1,33 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using EcoPulseBackend.Enums;
 
-namespace EcoPulseBackend.Models.Calculate;
+namespace EcoPulseBackend.Models.EmissionSource;
 
 /// <summary>
-/// Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника
+/// Модель изменения источника выброса
 /// </summary>
-public class MaximumSingleEmissionsCalculateModel
+public class EmissionSourceUpdateModel
 {
     /// <summary>
-    /// Загрязняющее вещество
+    /// Идентификатор
     /// </summary>
-    public Pollutant Pollutant { get; set; }
+    public int Id { get; set; }
+    
+    /// <summary>
+    /// Долгота
+    /// </summary>
+    public float Lon { get; set; }
+    
+    /// <summary>
+    /// Широта
+    /// </summary>
+    public float Lat { get; set; }
     
     /// <summary>
     /// Температура выбрасываемой ГВС
     /// </summary>
     [Range(235, 265)]
     public float EjectedTemp { get; set; }
-
-    /// <summary>
-    /// Температура атмосферного воздуха
-    /// </summary>
-    [Range(-40, 40)]
-    public float AirTemp { get; set; }
 
     /// <summary>
     /// Средняя скорость выхода ГВС из устья источника выброса, м/с
@@ -52,20 +56,4 @@ public class MaximumSingleEmissionsCalculateModel
     /// Коэффициент степени очистки
     /// </summary>
     public CoefficientDegreePurification SedimentationRateRatio { get; set; }
-    
-    /// <summary>
-    /// Скорость ветра
-    /// </summary>
-    public float WindSpeed { get; set; }
-
-    /// <summary>
-    /// Расстояние от источника выброса
-    /// </summary>
-    [Range(5, 10000)]
-    public int Distance { get; set; }
-    
-    /// <summary>
-    /// Количество максимальных точек
-    /// </summary>
-    public int MaxCount { get; set; }
 }

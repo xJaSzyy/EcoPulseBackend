@@ -1,4 +1,8 @@
 using EcoPulseBackend.Models;
+using EcoPulseBackend.Models.DuringMetalMachining;
+using EcoPulseBackend.Models.DuringWeldingOperations;
+using EcoPulseBackend.Models.GasolineGenerator;
+using EcoPulseBackend.Models.Reservoirs;
 
 namespace EcoPulseBackend.Interfaces;
 

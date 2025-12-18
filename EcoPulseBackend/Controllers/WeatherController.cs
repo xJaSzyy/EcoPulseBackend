@@ -17,7 +17,7 @@ public class WeatherController : ControllerBase
     {
         _httpClientFactory = httpClientFactory;
     }
-    
+
     /// <summary>
     /// Метод получения текущей погоды
     /// </summary>
@@ -32,7 +32,7 @@ public class WeatherController : ControllerBase
 
         var weatherUrl =
             "https://api.open-meteo.com/v1/forecast?latitude=55.355198&longitude=86.086847&current_weather=true";
-        
+
         try
         {
             var response = await httpClient.GetAsync(weatherUrl);
@@ -50,8 +50,9 @@ public class WeatherController : ControllerBase
                 Date = DateTime.UtcNow.Date,
                 Temperature = (float)weatherResponse!.CurrentWeather.Temperature,
                 WindSpeed = (float)weatherResponse.CurrentWeather.WindSpeed,
-                WindDirection = (int)weatherResponse.CurrentWeather.WindDirection,
-                IconUrl = GetWeatherIconUrl(weatherResponse.CurrentWeather.WeatherCode, weatherResponse.CurrentWeather.IsDay == 1)
+                WindDirection = (int)(weatherResponse.CurrentWeather.WindDirection + 180) % 360,
+                IconClass = GetWeatherInfo(weatherResponse.CurrentWeather.WeatherCode,
+                    weatherResponse.CurrentWeather.IsDay == 1).IconClass
             };
 
             return Ok(result);
@@ -61,54 +62,46 @@ public class WeatherController : ControllerBase
             return Ok(ex.ToString());
         }
     }
-    
-    private string GetWeatherIconUrl(int weatherCode, bool isDay)
-    {
-        var (description, iconName) = GetWeatherInfo(weatherCode, isDay);
-        return $"https://openweathermap.org/img/wn/{iconName}@2x.png";
-    }
-    
-    private (string Description, string IconName) GetWeatherInfo(int weatherCode, bool isDay)
+
+    private (string Description, string IconClass) GetWeatherInfo(int weatherCode, bool isDay)
     {
         return weatherCode switch
         {
-            0 => isDay ? 
-                ("Ясное небо", "01d") : 
-                ("Ясная ночь", "01n"),
-                
-            1 => isDay ? 
-                ("Преимущественно ясно", "02d") : 
-                ("Преимущественно ясно", "02n"),
-                
-            2 => isDay ? 
-                ("Переменная облачность", "03d") : 
-                ("Переменная облачность", "03n"),
-                
-            3 => ("Пасмурно", "04"),
-                
-            45 or 48 => ("Туман", "50"),
-                
-            51 or 53 or 55 => ("Морось", "09"),
-                
-            56 or 57 => ("Ледяная морось", "09"),
-                
-            61 or 63 or 65 => ("Дождь", "10"),
-                
-            66 or 67 => ("Ледяной дождь", "10"),
-                
-            71 or 73 or 75 => ("Снег", "13"),
-                
-            77 => ("Снежные зёрна", "13"),
-                
-            80 or 81 or 82 => ("Ливень", "09"),
-                
-            85 or 86 => ("Снегопад", "13"),
-                
-            95 => ("Гроза", "11"),
-                
-            96 or 99 => ("Гроза с градом", "11"),
-                
-            _ => ("Неизвестно", "01d")
+            0 => isDay
+                ? ("Ясное небо", "wi-day-sunny")
+                : ("Ясная ночь", "wi-night-clear"),
+
+            1 => isDay
+                ? ("Преимущественно ясно", "wi-day-cloudy")
+                : ("Преимущественно ясно", "wi-night-alt-cloudy"),
+
+            2 => ("Переменная облачность", "wi-cloudy"),
+
+            3 => ("Пасмурно", "wi-cloudy"),
+
+            45 or 48 => ("Туман", "wi-fog"),
+
+            51 or 53 or 55 => ("Морось", "wi-sprinkle"),
+
+            56 or 57 => ("Ледяная морось", "wi-rain-mix"),
+
+            61 or 63 or 65 => ("Дождь", "wi-rain"),
+
+            66 or 67 => ("Ледяной дождь", "wi-rain-mix"),
+
+            71 or 73 or 75 => ("Снег", "wi-snow"),
+
+            77 => ("Снежные зёрна", "wi-snow"),
+
+            80 or 81 or 82 => ("Ливень", "wi-showers"),
+
+            85 or 86 => ("Снегопад", "wi-snow-wind"),
+
+            95 => ("Гроза", "wi-thunderstorm"),
+
+            96 or 99 => ("Гроза с градом", "wi-storm-showers"),
+
+            _ => ("Неизвестно", "wi-na")
         };
     }
 }

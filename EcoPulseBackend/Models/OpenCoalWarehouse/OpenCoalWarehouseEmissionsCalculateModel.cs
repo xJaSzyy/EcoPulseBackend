@@ -1,4 +1,4 @@
-namespace EcoPulseBackend.Models.Calculate;
+namespace EcoPulseBackend.Models.OpenCoalWarehouse;
 
 /// <summary>
 /// Модель для расчета выбросов угольной пыли в атмосферу от открытых складов угля

@@ -1,4 +1,4 @@
-namespace EcoPulseBackend.Models.Calculate;
+namespace EcoPulseBackend.Models.GasolineGenerator;
 
 /// <summary>
 /// Модель для расчета выбросов загрязняющих веществ от бензогенератора

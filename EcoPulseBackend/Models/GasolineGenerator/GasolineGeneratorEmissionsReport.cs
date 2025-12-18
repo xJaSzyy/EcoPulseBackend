@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.GasolineGenerator;
 
 /// <summary>
 /// Отчет по расчету выбросов ЗВ от бензогенератора (входные + выходные данные)

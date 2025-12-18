@@ -26,7 +26,7 @@ public class WeatherViewModel
     public float WindSpeed { get; set; }
     
     /// <summary>
-    /// Ссылка на иконку
+    /// Класс иконки
     /// </summary>
-    public string IconUrl { get; set; } = null!;
+    public string IconClass { get; set; } = null!;
 }

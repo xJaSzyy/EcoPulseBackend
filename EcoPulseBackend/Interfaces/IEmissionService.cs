@@ -1,6 +1,14 @@
 using EcoPulseBackend.Enums;
 using EcoPulseBackend.Models;
-using EcoPulseBackend.Models.Calculate;
+using EcoPulseBackend.Models.DangerZone;
+using EcoPulseBackend.Models.DuringMetalMachining;
+using EcoPulseBackend.Models.DuringWeldingOperations;
+using EcoPulseBackend.Models.GasolineGenerator;
+using EcoPulseBackend.Models.MaximumSingle;
+using EcoPulseBackend.Models.OpenCoalWarehouse;
+using EcoPulseBackend.Models.Reservoirs;
+using EcoPulseBackend.Models.TrafficLightQueue;
+using EcoPulseBackend.Models.VehicleFlow;
 
 namespace EcoPulseBackend.Interfaces;
 

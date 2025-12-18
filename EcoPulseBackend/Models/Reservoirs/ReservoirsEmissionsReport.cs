@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using EcoPulseBackend.Enums;
 
-namespace EcoPulseBackend.Models;
+namespace EcoPulseBackend.Models.Reservoirs;
 
 /// <summary>
 /// Отчет по расчету выбросов ЗВ от резервуаров (входные + выходные данные)

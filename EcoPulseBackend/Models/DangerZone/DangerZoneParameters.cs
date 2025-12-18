@@ -1,10 +1,15 @@
-﻿namespace EcoPulseBackend.Models;
+﻿namespace EcoPulseBackend.Models.DangerZone;
 
 /// <summary>
 /// Параметры зоны выброса
 /// </summary>
 public class DangerZoneParameters
 {
+    /// <summary>
+    /// Идентификатор источника выброса
+    /// </summary>
+    public int EmissionSourceId { get; set; }
+    
     /// <summary>
     /// Долгота
     /// </summary>
