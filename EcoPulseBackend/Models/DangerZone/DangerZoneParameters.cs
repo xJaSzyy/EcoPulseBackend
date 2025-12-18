@@ -13,12 +13,12 @@ public class DangerZoneParameters
     /// <summary>
     /// Долгота
     /// </summary>
-    public float Lon { get; set; }
+    public double Lon { get; set; }
     
     /// <summary>
     /// Широта
     /// </summary>
-    public float Lat { get; set; }
+    public double Lat { get; set; }
     
     /// <summary>
     /// Длина зоны выброса

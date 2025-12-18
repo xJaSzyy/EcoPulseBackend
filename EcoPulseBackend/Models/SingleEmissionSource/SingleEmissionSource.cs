@@ -15,15 +15,10 @@ public class SingleEmissionSource
     public int Id { get; set; }
     
     /// <summary>
-    /// Долгота
+    /// Координаты
     /// </summary>
-    public float Lon { get; set; }
-    
-    /// <summary>
-    /// Широта
-    /// </summary>
-    public float Lat { get; set; }
-    
+    public Coordinates Location { get; set; } = null!;
+
     /// <summary>
     /// Температура выбрасываемой ГВС
     /// </summary>

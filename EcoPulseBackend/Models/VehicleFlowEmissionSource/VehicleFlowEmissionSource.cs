@@ -14,12 +14,12 @@ public class VehicleFlowEmissionSource
     public int Id { get; set; }
     
     /// <summary>
-    /// Долгота
+    /// Начальные координаты
     /// </summary>
-    public float Lon { get; set; }
+    public Coordinates StartLocation { get; set; } = null!;
     
     /// <summary>
-    /// Широта
+    /// Конечные координаты
     /// </summary>
-    public float Lat { get; set; }
+    public Coordinates EndLocation { get; set; } = null!;
 }

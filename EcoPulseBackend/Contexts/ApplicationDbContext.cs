@@ -15,4 +15,37 @@ public class ApplicationDbContext : DbContext
     {
         Database.EnsureCreated();
     }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.Entity<SingleEmissionSource>()
+            .OwnsOne(
+                e => e.Location,
+                cb =>
+                {
+                    cb.Property(c => c.Lon).HasColumnName("Lon");
+                    cb.Property(c => c.Lat).HasColumnName("Lat");
+                });
+        
+        builder.Entity<VehicleFlowEmissionSource>()
+            .OwnsOne(
+                e => e.StartLocation,
+                cb =>
+                {
+                    cb.Property(c => c.Lon).HasColumnName("StartLon");
+                    cb.Property(c => c.Lat).HasColumnName("StartLat");
+                });
+
+        builder.Entity<VehicleFlowEmissionSource>()
+            .OwnsOne(
+                e => e.EndLocation,
+                cb =>
+                {
+                    cb.Property(c => c.Lon).HasColumnName("EndLon");
+                    cb.Property(c => c.Lat).HasColumnName("EndLat");
+                });
+
+    }
 }

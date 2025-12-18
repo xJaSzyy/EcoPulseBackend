@@ -1,4 +1,5 @@
 ﻿using EcoPulseBackend.Contexts;
+using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.SingleEmissionSource;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +15,16 @@ public class EmissionSourceController : ControllerBase
         _dbContext = dbContext;
     }
 
-    [HttpPost("/emissionSource/single")]
+    [HttpPost("/emission-source/single")]
     public async Task<IActionResult> AddSingleEmissionSource([FromBody] SingleEmissionSourceAddModel model)
     {
         var emissionSource = new SingleEmissionSource
         {
-            Lon = model.Lon,
-            Lat = model.Lat,
+            Location = new Coordinates
+            {
+                Lon = model.Lon,
+                Lat = model.Lat
+            },
             EjectedTemp = model.EjectedTemp,
             AvgExitSpeed = model.AvgExitSpeed,
             HeightSource = model.HeightSource,
@@ -35,7 +39,7 @@ public class EmissionSourceController : ControllerBase
         return Ok(emissionSource);
     }
     
-    [HttpGet("/emissionSource/single/{id:int}")]
+    [HttpGet("/emission-source/single/{id:int}")]
     public IActionResult GetSingleEmissionSourceById(int id)
     {
         var result = _dbContext.SingleEmissionSources.FirstOrDefault(s => s.Id == id);
@@ -48,7 +52,7 @@ public class EmissionSourceController : ControllerBase
         return Ok(result);
     } 
     
-    [HttpPut("/emissionSource/single")]
+    [HttpPut("/emission-source/single")]
     public async Task<IActionResult> UpdateSingleEmissionSource([FromBody] SingleEmissionSourceUpdateModel model)
     {
         var emissionSource = _dbContext.SingleEmissionSources.FirstOrDefault(s => s.Id == model.Id);
@@ -58,8 +62,8 @@ public class EmissionSourceController : ControllerBase
             return NotFound();
         }
         
-        emissionSource.Lon = model.Lon;
-        emissionSource.Lat = model.Lat;
+        emissionSource.Location.Lon = model.Lon;
+        emissionSource.Location.Lat = model.Lat;
         emissionSource.EjectedTemp = model.EjectedTemp;
         emissionSource.AvgExitSpeed = model.AvgExitSpeed;
         emissionSource.HeightSource = model.HeightSource;
@@ -73,7 +77,7 @@ public class EmissionSourceController : ControllerBase
         return Ok(emissionSource);
     }
     
-    [HttpDelete("/emissionSource/single/{id:int}")]
+    [HttpDelete("/emission-source/single/{id:int}")]
     public async Task<IActionResult> DeleteSingleEmissionSource(int id)
     {
         var emissionSource = _dbContext.SingleEmissionSources.FirstOrDefault(s => s.Id == id);
@@ -88,4 +92,17 @@ public class EmissionSourceController : ControllerBase
         
         return Ok(emissionSource);
     }
+    
+    [HttpGet("/emission-source/vehicleFlow/{id:int}")]
+    public IActionResult GetVehicleFlowEmissionSourceById(int id)
+    {
+        var result = _dbContext.VehicleFlowEmissionSources.FirstOrDefault(s => s.Id == id);
+
+        if (result == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(result);
+    } 
 }
