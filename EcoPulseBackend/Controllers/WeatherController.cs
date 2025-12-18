@@ -50,7 +50,7 @@ public class WeatherController : ControllerBase
                 Date = DateTime.UtcNow.Date,
                 Temperature = (float)weatherResponse!.CurrentWeather.Temperature,
                 WindSpeed = (float)weatherResponse.CurrentWeather.WindSpeed,
-                WindDirection = (int)weatherResponse.CurrentWeather.WindDirection,
+                WindDirection = (int)(weatherResponse.CurrentWeather.WindDirection + 180) % 360,
                 IconClass = GetWeatherInfo(weatherResponse.CurrentWeather.WeatherCode,
                     weatherResponse.CurrentWeather.IsDay == 1).IconClass
             };
