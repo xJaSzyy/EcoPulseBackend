@@ -203,6 +203,7 @@ public class EmissionService : IEmissionService
         
         foreach (var source in emissionSources)
         {
+            var length = (float)GeoUtils.DistanceMeters(source.StartLocation, source.EndLocation);
             var calculateModel = new VehicleFlowEmissionsCalculateModel
             {
                 VehicleGroups =
@@ -210,11 +211,11 @@ public class EmissionService : IEmissionService
                     new VehicleGroup
                     {
                         VehicleType = source.VehicleType,
-                        MaxTrafficIntensity = source.MaxTrafficIntensity,
+                        MaxTrafficIntensity = source.MaxTrafficIntensity * (length / 1000f),
                         AverageSpeed = source.AverageSpeed
                     }
                 ],
-                Length = (float)GeoUtils.DistanceMeters(source.StartLocation, source.EndLocation)
+                Length = length
             };
             
             var emissionsResult = CalculateVehicleFlowEmissions(Pollutant.NO2, calculateModel);
@@ -546,7 +547,7 @@ public class EmissionService : IEmissionService
             emission += specificEmission * vehicleGroup.MaxTrafficIntensity * speedCorrectionFactor;
         }
         
-        emission *= model.Length / 1000f / 3600f;
+        emission *= model.Length / 3600f;
 
         var result = new EmissionsResult
         {
