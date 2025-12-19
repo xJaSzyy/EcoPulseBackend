@@ -1,6 +1,7 @@
 ﻿using EcoPulseBackend.Contexts;
 using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.SingleEmissionSource;
+using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcoPulseBackend.Controllers;
@@ -93,7 +94,25 @@ public class EmissionSourceController : ControllerBase
         return Ok(emissionSource);
     }
     
-    [HttpGet("/emission-source/vehicleFlow/{id:int}")]
+    [HttpPost("/emission-source/vehicle-flow")]
+    public async Task<IActionResult> AddVehicleFlowEmissionSource([FromBody] VehicleFlowEmissionSourceAddModel model)
+    {
+        var emissionSource = new VehicleFlowEmissionSource
+        {
+            StartLocation = model.StartLocation,
+            EndLocation = model.EndLocation,    
+            VehicleType = model.VehicleType,
+            MaxTrafficIntensity = model.MaxTrafficIntensity,
+            AverageSpeed =  model.AverageSpeed
+        };
+        
+        _dbContext.VehicleFlowEmissionSources.Add(emissionSource);
+        await _dbContext.SaveChangesAsync();
+        
+        return Ok(emissionSource);
+    }
+    
+    [HttpGet("/emission-source/vehicle-flow/{id:int}")]
     public IActionResult GetVehicleFlowEmissionSourceById(int id)
     {
         var result = _dbContext.VehicleFlowEmissionSources.FirstOrDefault(s => s.Id == id);
