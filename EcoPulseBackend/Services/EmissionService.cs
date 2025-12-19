@@ -1,4 +1,5 @@
 using EcoPulseBackend.Enums;
+using EcoPulseBackend.Extensions;
 using EcoPulseBackend.Interfaces;
 using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.DangerZone;
@@ -10,6 +11,7 @@ using EcoPulseBackend.Models.OpenCoalWarehouse;
 using EcoPulseBackend.Models.Reservoirs;
 using EcoPulseBackend.Models.TrafficLightQueue;
 using EcoPulseBackend.Models.VehicleFlow;
+using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 
 namespace EcoPulseBackend.Services;
 
@@ -178,13 +180,13 @@ public class EmissionService : IEmissionService
         return new List<EmissionsResult> { result };
     }
     
-    public DangerZoneParameters CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model)
+    public SingleDangerZone CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == model.Pollutant);
 
         if (!pollutantInfo.Mass.HasValue)
         {
-            return new DangerZoneParameters();
+            return new SingleDangerZone();
         }
         
         Setup(model);
@@ -192,7 +194,56 @@ public class EmissionService : IEmissionService
         var distances = Enumerable.Range(1, model.Distance / 5).Select(i => i * 5f).ToList();
         
         var concentrations = GetNormalSurfaceConcentration(distances, (float)pollutantInfo.Mass);
-        return CalculateDangerZoneParameters(concentrations, (float)pollutantInfo.Mass, model.WindSpeed);
+        return CalculateSingleDangerZone(concentrations, (float)pollutantInfo.Mass, model.WindSpeed);
+    }
+
+    public List<VehicleFlowDangerZone> CalculateVehicleFlowEmissionDangerZones(List<VehicleFlowEmissionSource> emissionSources)
+    {
+        var result = new List<VehicleFlowDangerZone>();
+        
+        foreach (var source in emissionSources)
+        {
+            var calculateModel = new VehicleFlowEmissionsCalculateModel
+            {
+                VehicleGroups =
+                [
+                    new VehicleGroup
+                    {
+                        VehicleType = source.VehicleType,
+                        MaxTrafficIntensity = source.MaxTrafficIntensity,
+                        AverageSpeed = source.AverageSpeed
+                    }
+                ],
+                Length = (float)GeoUtils.DistanceMeters(source.StartLocation, source.EndLocation)
+            };
+            
+            var emissionsResult = CalculateVehicleFlowEmissions(Pollutant.NO2, calculateModel);
+
+            if (emissionsResult == null)
+            {
+                return [];
+            }
+            
+            var pm = emissionsResult.MaximumEmission;
+
+            var color = DataStorage.ColorMap[225.4];
+            foreach (var pair in DataStorage.ColorMap.Where(pair => pm <= pair.Key))
+            {
+                color = pair.Value;
+                break;
+            }
+            
+            result.Add(new VehicleFlowDangerZone
+            {
+                EmissionSourceId = source.Id,
+                StartLocation = source.StartLocation,
+                EndLocation = source.EndLocation,
+                Color = color,
+                AverageConcentration = emissionsResult.MaximumEmission
+            });
+        }
+
+        return result;
     }
 
     #region Private
@@ -495,7 +546,7 @@ public class EmissionService : IEmissionService
             emission += specificEmission * vehicleGroup.MaxTrafficIntensity * speedCorrectionFactor;
         }
         
-        emission *= model.Length / 3600f;
+        emission *= model.Length / 1000f / 3600f;
 
         var result = new EmissionsResult
         {
@@ -535,7 +586,7 @@ public class EmissionService : IEmissionService
         return result;
     }
     
-    private DangerZoneParameters CalculateDangerZoneParameters(List<float> concentrations, float mass, float windSpeed)
+    private SingleDangerZone CalculateSingleDangerZone(List<float> concentrations, float mass, float windSpeed)
     {
         var maxIndex = int.MinValue;
         var maxDistance = double.MinValue;
@@ -600,7 +651,7 @@ public class EmissionService : IEmissionService
             }
         }
         
-        return new DangerZoneParameters()
+        return new SingleDangerZone()
         {
             Length = dangerZoneLength,
             Width = dangerZoneWidth,

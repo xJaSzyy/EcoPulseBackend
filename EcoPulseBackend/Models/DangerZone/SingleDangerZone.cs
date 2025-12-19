@@ -1,9 +1,9 @@
 ﻿namespace EcoPulseBackend.Models.DangerZone;
 
 /// <summary>
-/// Параметры зоны выброса
+/// Зона выброса от одиночного точечного источника
 /// </summary>
-public class DangerZoneParameters
+public class SingleDangerZone
 {
     /// <summary>
     /// Идентификатор источника выброса

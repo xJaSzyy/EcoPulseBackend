@@ -27,11 +27,11 @@ public class DangerZoneController : ControllerBase
     }
     
     [HttpPost("danger-zones/single")]
-    public IActionResult CalculateSingleDangerZones([FromBody] DangerZoneCalculateModel model)
+    public IActionResult CalculateSingleDangerZones([FromBody] SingleDangerZoneCalculateModel model)
     {
         var emissionSources = _dbContext.SingleEmissionSources.ToList();
 
-        var result = new List<DangerZoneParameters>();
+        var result = new List<SingleDangerZone>();
         
         foreach (var emissionSource in emissionSources)
         {
@@ -49,13 +49,13 @@ public class DangerZoneController : ControllerBase
                 Distance = 10000
             };
 
-            var dangerZoneParameters = _emissionService.CalculateMaximumSingleEmissionsDangerZone(calculateModel);
-            dangerZoneParameters.EmissionSourceId = emissionSource.Id;
-            dangerZoneParameters.Lon = emissionSource.Location.Lon;
-            dangerZoneParameters.Lat = emissionSource.Location.Lat;
-            dangerZoneParameters.Angle = model.WindDirection;
+            var dangerZone = _emissionService.CalculateMaximumSingleEmissionsDangerZone(calculateModel);
+            dangerZone.EmissionSourceId = emissionSource.Id;
+            dangerZone.Lon = emissionSource.Location.Lon;
+            dangerZone.Lat = emissionSource.Location.Lat;
+            dangerZone.Angle = model.WindDirection;
             
-            result.Add(dangerZoneParameters);
+            result.Add(dangerZone);
         }
 
         return Ok(result);
@@ -66,6 +66,8 @@ public class DangerZoneController : ControllerBase
     {
         var emissionSources = _dbContext.VehicleFlowEmissionSources.ToList();
 
-        return Ok(emissionSources);
+        var result = _emissionService.CalculateVehicleFlowEmissionDangerZones(emissionSources);
+
+        return Ok(result);
     }
 }

@@ -9,6 +9,7 @@ using EcoPulseBackend.Models.OpenCoalWarehouse;
 using EcoPulseBackend.Models.Reservoirs;
 using EcoPulseBackend.Models.TrafficLightQueue;
 using EcoPulseBackend.Models.VehicleFlow;
+using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 
 namespace EcoPulseBackend.Interfaces;
 
@@ -75,5 +76,7 @@ public interface IEmissionService
     /// </summary>
     /// <param name="model">Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника</param>
     /// <returns></returns>
-    public DangerZoneParameters CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model);
+    public SingleDangerZone CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model);
+
+    public List<VehicleFlowDangerZone> CalculateVehicleFlowEmissionDangerZones(List<VehicleFlowEmissionSource> emissionSources);
 }

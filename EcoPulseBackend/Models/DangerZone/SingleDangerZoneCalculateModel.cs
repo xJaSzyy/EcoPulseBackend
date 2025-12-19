@@ -3,7 +3,7 @@ using EcoPulseBackend.Enums;
 
 namespace EcoPulseBackend.Models.DangerZone;
 
-public class DangerZoneCalculateModel
+public class SingleDangerZoneCalculateModel
 {
     /// <summary>
     /// Загрязняющее вещество
