@@ -1,6 +1,7 @@
 ﻿using EcoPulseBackend.Contexts;
 using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.SingleEmissionSource;
+using EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
 using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 using Microsoft.AspNetCore.Mvc;
 
@@ -123,5 +124,23 @@ public class EmissionSourceController : ControllerBase
         }
         
         return Ok(result);
-    } 
+    }
+    
+    [HttpPost("/emission-source/traffic-light-queue")]
+    public async Task<IActionResult> AddTrafficLightQueueEmissionSource([FromBody] TrafficLightQueueEmissionSourceAddModel model)
+    {
+        var emissionSource = new TrafficLightQueueEmissionSource
+        {
+            Location = model.Location,
+            TrafficLightCycles = model.TrafficLightCycles,
+            TrafficLightStopTime = model.TrafficLightStopTime,
+            VehicleType = model.VehicleType,
+            VehiclesCount = model.VehiclesCount
+        };
+        
+        _dbContext.TrafficLightQueueEmissionSources.Add(emissionSource);
+        await _dbContext.SaveChangesAsync();
+        
+        return Ok(emissionSource);
+    }
 }

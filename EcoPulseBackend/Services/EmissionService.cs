@@ -10,6 +10,7 @@ using EcoPulseBackend.Models.MaximumSingle;
 using EcoPulseBackend.Models.OpenCoalWarehouse;
 using EcoPulseBackend.Models.Reservoirs;
 using EcoPulseBackend.Models.TrafficLightQueue;
+using EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
 using EcoPulseBackend.Models.VehicleFlow;
 using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 
@@ -239,6 +240,54 @@ public class EmissionService : IEmissionService
                 EmissionSourceId = source.Id,
                 StartLocation = source.StartLocation,
                 EndLocation = source.EndLocation,
+                Color = color,
+                AverageConcentration = emissionsResult.MaximumEmission
+            });
+        }
+
+        return result;
+    }
+
+    public List<TrafficLightQueueDangerZone> CalculateTrafficLightQueueEmissionDangerZones(List<TrafficLightQueueEmissionSource> emissionSources)
+    {
+        var result = new List<TrafficLightQueueDangerZone>();
+        
+        foreach (var source in emissionSources)
+        {
+            var calculateModel = new TrafficLightQueueEmissionsCalculateModel
+            {
+                VehicleGroups =
+                [
+                    new VehicleGroupQueue
+                    {
+                        VehicleType = source.VehicleType,
+                        VehiclesCount = source.VehiclesCount
+                    }
+                ],
+                TrafficLightCycles = source.TrafficLightCycles,
+                TrafficLightStopTime = source.TrafficLightStopTime
+            };
+            
+            var emissionsResult = CalculateTrafficLightQueueEmissions(Pollutant.NO2, calculateModel);
+
+            if (emissionsResult == null)
+            {
+                return [];
+            }
+            
+            var pm = emissionsResult.MaximumEmission;
+
+            var color = DataStorage.ColorMap[225.4];
+            foreach (var pair in DataStorage.ColorMap.Where(pair => pm <= pair.Key))
+            {
+                color = pair.Value;
+                break;
+            }
+            
+            result.Add(new TrafficLightQueueDangerZone
+            {
+                EmissionSourceId = source.Id,
+                Location = source.Location,
                 Color = color,
                 AverageConcentration = emissionsResult.MaximumEmission
             });

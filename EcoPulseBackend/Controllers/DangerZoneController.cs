@@ -61,7 +61,7 @@ public class DangerZoneController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("danger-zones/vehicleFlow")]
+    [HttpPost("danger-zones/vehicle-flow")]
     public IActionResult CalculateVehicleFlowDangerZones()
     {
         var emissionSources = _dbContext.VehicleFlowEmissionSources.ToList();
@@ -76,7 +76,7 @@ public class DangerZoneController : ControllerBase
     {
         var emissionSources = _dbContext.TrafficLightQueueEmissionSources.ToList();
 
-        var result = emissionSources;//_emissionService.CalculateVehicleFlowEmissionDangerZones(emissionSources);
+        var result = _emissionService.CalculateTrafficLightQueueEmissionDangerZones(emissionSources);
 
         return Ok(result);
     }
