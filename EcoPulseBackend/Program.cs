@@ -1,4 +1,6 @@
 using EcoPulseBackend;
+using EcoPulseBackend.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,7 @@ builder.Configuration
     .AddJsonFile("appsettings.json")
     .AddEnvironmentVariables();
 
-builder.Services.AddDatabase();
+builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddHttpClient();
 
 builder.Services.AddCors(options =>
@@ -42,5 +44,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();
