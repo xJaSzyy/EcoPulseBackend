@@ -1,4 +1,5 @@
 ﻿using EcoPulseBackend.Models.SingleEmissionSource;
+using EcoPulseBackend.Models.TrafficLightQueue;
 using EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
 using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +11,13 @@ public class ApplicationDbContext : DbContext
     public virtual DbSet<SingleEmissionSource> SingleEmissionSources { get; set; } = null!;
     public virtual DbSet<VehicleFlowEmissionSource> VehicleFlowEmissionSources { get; set; } = null!;
     public virtual DbSet<TrafficLightQueueEmissionSource> TrafficLightQueueEmissionSources { get; set; } = null!;
+    public virtual DbSet<VehicleGroupQueue> VehicleGroupQueues { get; set; } = null!;
     
     public ApplicationDbContext() {  }
     
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
-        Database.EnsureCreated();
+        //Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

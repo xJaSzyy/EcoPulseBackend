@@ -256,14 +256,7 @@ public class EmissionService : IEmissionService
         {
             var calculateModel = new TrafficLightQueueEmissionsCalculateModel
             {
-                VehicleGroups =
-                [
-                    new VehicleGroupQueue
-                    {
-                        VehicleType = source.VehicleType,
-                        VehiclesCount = source.VehiclesCount
-                    }
-                ],
+                VehicleGroups = source.VehicleGroups,
                 TrafficLightCycles = source.TrafficLightCycles,
                 TrafficLightStopTime = source.TrafficLightStopTime
             };

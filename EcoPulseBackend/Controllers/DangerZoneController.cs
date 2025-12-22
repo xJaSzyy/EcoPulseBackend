@@ -3,6 +3,7 @@ using EcoPulseBackend.Interfaces;
 using EcoPulseBackend.Models.DangerZone;
 using EcoPulseBackend.Models.MaximumSingle;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcoPulseBackend.Controllers;
 
@@ -74,7 +75,9 @@ public class DangerZoneController : ControllerBase
     [HttpPost("danger-zones/traffic-light-queue")]
     public IActionResult CalculateTrafficLightQueueDangerZones()
     {
-        var emissionSources = _dbContext.TrafficLightQueueEmissionSources.ToList();
+        var emissionSources = _dbContext.TrafficLightQueueEmissionSources
+            .Include(s => s.VehicleGroups)
+            .ToList();
 
         var result = _emissionService.CalculateTrafficLightQueueEmissionDangerZones(emissionSources);
 

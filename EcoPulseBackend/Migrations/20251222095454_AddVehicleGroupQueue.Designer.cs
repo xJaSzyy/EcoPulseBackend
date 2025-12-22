@@ -2,6 +2,7 @@
 using EcoPulseBackend.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EcoPulseBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251222095454_AddVehicleGroupQueue")]
+    partial class AddVehicleGroupQueue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,7 @@ namespace EcoPulseBackend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("TrafficLightQueueEmissionSourceId")
+                    b.Property<int?>("TrafficLightQueueEmissionSourceId")
                         .HasColumnType("integer");
 
                     b.Property<int>("VehicleType")
@@ -148,9 +151,7 @@ namespace EcoPulseBackend.Migrations
                 {
                     b.HasOne("EcoPulseBackend.Models.TrafficLightQueueEmissionSource.TrafficLightQueueEmissionSource", null)
                         .WithMany("VehicleGroups")
-                        .HasForeignKey("TrafficLightQueueEmissionSourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TrafficLightQueueEmissionSourceId");
                 });
 
             modelBuilder.Entity("EcoPulseBackend.Models.TrafficLightQueueEmissionSource.TrafficLightQueueEmissionSource", b =>

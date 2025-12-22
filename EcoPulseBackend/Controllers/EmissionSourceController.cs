@@ -1,9 +1,12 @@
 ﻿using EcoPulseBackend.Contexts;
+using EcoPulseBackend.Enums;
 using EcoPulseBackend.Models;
 using EcoPulseBackend.Models.SingleEmissionSource;
+using EcoPulseBackend.Models.TrafficLightQueue;
 using EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
 using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcoPulseBackend.Controllers;
 
@@ -134,13 +137,22 @@ public class EmissionSourceController : ControllerBase
             Location = model.Location,
             TrafficLightCycles = model.TrafficLightCycles,
             TrafficLightStopTime = model.TrafficLightStopTime,
-            VehicleType = model.VehicleType,
-            VehiclesCount = model.VehiclesCount
+            VehicleGroups = model.VehicleGroups
         };
         
         _dbContext.TrafficLightQueueEmissionSources.Add(emissionSource);
         await _dbContext.SaveChangesAsync();
         
         return Ok(emissionSource);
+    }
+    
+    [HttpGet("/emission-source/traffic-light-queue")]
+    public IActionResult GetTrafficLightQueueEmissionSources()
+    {
+        var sources = _dbContext.TrafficLightQueueEmissionSources
+            .Include(s => s.VehicleGroups)
+            .ToList();
+
+        return Ok(sources);
     }
 }

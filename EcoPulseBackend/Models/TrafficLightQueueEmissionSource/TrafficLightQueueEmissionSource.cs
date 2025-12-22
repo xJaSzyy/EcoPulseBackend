@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using EcoPulseBackend.Enums;
+using EcoPulseBackend.Models.TrafficLightQueue;
 
 namespace EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
 
@@ -17,14 +18,9 @@ public class TrafficLightQueueEmissionSource
     public Coordinates Location { get; set; } = null!;
     
     /// <summary>
-    /// Тип транспортного средства
+    /// Список групп транспортных средств, стоящих в очереди
     /// </summary>
-    public VehicleType VehicleType { get; set; }
-        
-    /// <summary>
-    /// Количество автомобилей, находящихся в «очереди» в зоне перекрестка в конце п-го цикла запрещающего сигнала светофора
-    /// </summary>
-    public int VehiclesCount { get; set; }
+    public List<VehicleGroupQueue> VehicleGroups { get; set; } = [];
     
     /// <summary>
     /// Количество циклов действия запрещающего сигнала светофора за 20-минутный период времени
