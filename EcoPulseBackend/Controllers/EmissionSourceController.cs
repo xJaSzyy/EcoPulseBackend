@@ -129,6 +129,28 @@ public class EmissionSourceController : ControllerBase
         return Ok(result);
     }
     
+    [HttpPut("/emission-source/vehicle-flow")]
+    public async Task<IActionResult> UpdateVehicleFlowEmissionSource([FromBody] VehicleFlowEmissionSourceUpdateModel model)
+    {
+        var emissionSource = _dbContext.VehicleFlowEmissionSources.FirstOrDefault(s => s.Id == model.Id);
+
+        if (emissionSource == null)
+        {
+            return NotFound();
+        }
+
+        emissionSource.StartLocation = model.StartLocation ??  emissionSource.StartLocation;
+        emissionSource.EndLocation = model.EndLocation ??  emissionSource.EndLocation;
+        emissionSource.VehicleType = model.VehicleType ?? emissionSource.VehicleType;
+        emissionSource.MaxTrafficIntensity = model.MaxTrafficIntensity ??  emissionSource.MaxTrafficIntensity;
+        emissionSource.AverageSpeed = model.AverageSpeed ?? emissionSource.AverageSpeed;
+        
+        _dbContext.VehicleFlowEmissionSources.Update(emissionSource);
+        await _dbContext.SaveChangesAsync();
+        
+        return Ok(emissionSource);
+    }
+    
     [HttpPost("/emission-source/traffic-light-queue")]
     public async Task<IActionResult> AddTrafficLightQueueEmissionSource([FromBody] TrafficLightQueueEmissionSourceAddModel model)
     {
