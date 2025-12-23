@@ -103,8 +103,7 @@ public class EmissionSourceController : ControllerBase
     {
         var emissionSource = new VehicleFlowEmissionSource
         {
-            StartLocation = model.StartLocation,
-            EndLocation = model.EndLocation,    
+            Points  = model.Points,
             VehicleType = model.VehicleType,
             MaxTrafficIntensity = model.MaxTrafficIntensity,
             AverageSpeed =  model.AverageSpeed
@@ -139,10 +138,9 @@ public class EmissionSourceController : ControllerBase
             return NotFound();
         }
 
-        emissionSource.StartLocation = model.StartLocation ??  emissionSource.StartLocation;
-        emissionSource.EndLocation = model.EndLocation ??  emissionSource.EndLocation;
+        emissionSource.Points = model.Points ?? emissionSource.Points;
         emissionSource.VehicleType = model.VehicleType ?? emissionSource.VehicleType;
-        emissionSource.MaxTrafficIntensity = model.MaxTrafficIntensity ??  emissionSource.MaxTrafficIntensity;
+        emissionSource.MaxTrafficIntensity = model.MaxTrafficIntensity ?? emissionSource.MaxTrafficIntensity;
         emissionSource.AverageSpeed = model.AverageSpeed ?? emissionSource.AverageSpeed;
         
         _dbContext.VehicleFlowEmissionSources.Update(emissionSource);

@@ -1,4 +1,6 @@
-﻿using EcoPulseBackend.Models.SingleEmissionSource;
+﻿using System.Text.Json;
+using EcoPulseBackend.Models;
+using EcoPulseBackend.Models.SingleEmissionSource;
 using EcoPulseBackend.Models.TrafficLightQueue;
 using EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
 using EcoPulseBackend.Models.VehicleFlowEmissionSource;
@@ -34,22 +36,11 @@ public class ApplicationDbContext : DbContext
                 });
         
         builder.Entity<VehicleFlowEmissionSource>()
-            .OwnsOne(
-                e => e.StartLocation,
-                cb =>
-                {
-                    cb.Property(c => c.Lon).HasColumnName("StartLon");
-                    cb.Property(c => c.Lat).HasColumnName("StartLat");
-                });
+            .Property(e => e.Points)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                v => JsonSerializer.Deserialize<List<Coordinates>>(v, (JsonSerializerOptions?)null)!);
 
-        builder.Entity<VehicleFlowEmissionSource>()
-            .OwnsOne(
-                e => e.EndLocation,
-                cb =>
-                {
-                    cb.Property(c => c.Lon).HasColumnName("EndLon");
-                    cb.Property(c => c.Lat).HasColumnName("EndLat");
-                });
         
         builder.Entity<TrafficLightQueueEmissionSource>()
             .OwnsOne(

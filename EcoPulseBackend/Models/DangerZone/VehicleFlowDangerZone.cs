@@ -10,16 +10,8 @@ public class VehicleFlowDangerZone
     /// </summary>
     public int EmissionSourceId { get; set; }
     
-    /// <summary>
-    /// Начальные координаты
-    /// </summary>
-    public Coordinates StartLocation { get; set; } = null!;
-    
-    /// <summary>
-    /// Конечные координаты
-    /// </summary>
-    public Coordinates EndLocation { get; set; } = null!;
-    
+    public List<Coordinates> Points { get; set; } = null!;
+
     /// <summary>
     /// Цвет зоны выброса
     /// </summary>

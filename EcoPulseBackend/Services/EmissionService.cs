@@ -204,7 +204,14 @@ public class EmissionService : IEmissionService
         
         foreach (var source in emissionSources)
         {
-            var length = (float)GeoUtils.DistanceMeters(source.StartLocation, source.EndLocation);
+            var points = source.Points;
+            
+            float length = 0;
+            for (var i = 1; i < points.Count; i++)
+            {
+                length += (float)GeoUtils.DistanceMeters(points[i - 1], points[i]);
+            }
+            
             var calculateModel = new VehicleFlowEmissionsCalculateModel
             {
                 VehicleGroups =
@@ -238,8 +245,7 @@ public class EmissionService : IEmissionService
             result.Add(new VehicleFlowDangerZone
             {
                 EmissionSourceId = source.Id,
-                StartLocation = source.StartLocation,
-                EndLocation = source.EndLocation,
+                Points = points,
                 Color = color,
                 AverageConcentration = emissionsResult.MaximumEmission
             });

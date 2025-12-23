@@ -9,15 +9,7 @@ public class VehicleFlowEmissionSourceUpdateModel
     /// </summary>
     public int Id { get; set; }
     
-    /// <summary>
-    /// Начальные координаты
-    /// </summary>
-    public Coordinates? StartLocation { get; set; } = null!;
-    
-    /// <summary>
-    /// Конечные координаты
-    /// </summary>
-    public Coordinates? EndLocation { get; set; } = null!;
+    public List<Coordinates>? Points { get; set; }
     
     /// <summary>
     /// Тип транспортного средства
