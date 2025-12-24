@@ -2,6 +2,7 @@
 using EcoPulseBackend.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EcoPulseBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251224101303_AddCity")]
+    partial class AddCity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,9 +52,6 @@ namespace EcoPulseBackend.Migrations
                     b.Property<float>("AvgExitSpeed")
                         .HasColumnType("real");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer");
-
                     b.Property<float>("DiameterSource")
                         .HasColumnType("real");
 
@@ -68,8 +68,6 @@ namespace EcoPulseBackend.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("SingleEmissionSources");
                 });
@@ -106,9 +104,6 @@ namespace EcoPulseBackend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TrafficLightCycles")
                         .HasColumnType("integer");
 
@@ -116,8 +111,6 @@ namespace EcoPulseBackend.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("TrafficLightQueueEmissionSources");
                 });
@@ -133,9 +126,6 @@ namespace EcoPulseBackend.Migrations
                     b.Property<float>("AverageSpeed")
                         .HasColumnType("real");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer");
-
                     b.Property<float>("MaxTrafficIntensity")
                         .HasColumnType("real");
 
@@ -148,46 +138,11 @@ namespace EcoPulseBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.ToTable("VehicleFlowEmissionSources");
-                });
-
-            modelBuilder.Entity("EcoPulseBackend.Models.City", b =>
-                {
-                    b.OwnsOne("EcoPulseBackend.Models.Coordinates", "Location", b1 =>
-                        {
-                            b1.Property<int>("CityId")
-                                .HasColumnType("integer");
-
-                            b1.Property<double>("Lat")
-                                .HasColumnType("double precision")
-                                .HasColumnName("Lat");
-
-                            b1.Property<double>("Lon")
-                                .HasColumnType("double precision")
-                                .HasColumnName("Lon");
-
-                            b1.HasKey("CityId");
-
-                            b1.ToTable("Cities");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CityId");
-                        });
-
-                    b.Navigation("Location")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EcoPulseBackend.Models.SingleEmissionSource.SingleEmissionSource", b =>
                 {
-                    b.HasOne("EcoPulseBackend.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsOne("EcoPulseBackend.Models.Coordinates", "Location", b1 =>
                         {
                             b1.Property<int>("SingleEmissionSourceId")
@@ -209,8 +164,6 @@ namespace EcoPulseBackend.Migrations
                                 .HasForeignKey("SingleEmissionSourceId");
                         });
 
-                    b.Navigation("City");
-
                     b.Navigation("Location")
                         .IsRequired();
                 });
@@ -226,12 +179,6 @@ namespace EcoPulseBackend.Migrations
 
             modelBuilder.Entity("EcoPulseBackend.Models.TrafficLightQueueEmissionSource.TrafficLightQueueEmissionSource", b =>
                 {
-                    b.HasOne("EcoPulseBackend.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsOne("EcoPulseBackend.Models.Coordinates", "Location", b1 =>
                         {
                             b1.Property<int>("TrafficLightQueueEmissionSourceId")
@@ -253,21 +200,8 @@ namespace EcoPulseBackend.Migrations
                                 .HasForeignKey("TrafficLightQueueEmissionSourceId");
                         });
 
-                    b.Navigation("City");
-
                     b.Navigation("Location")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EcoPulseBackend.Models.VehicleFlowEmissionSource.VehicleFlowEmissionSource", b =>
-                {
-                    b.HasOne("EcoPulseBackend.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("EcoPulseBackend.Models.TrafficLightQueueEmissionSource.TrafficLightQueueEmissionSource", b =>

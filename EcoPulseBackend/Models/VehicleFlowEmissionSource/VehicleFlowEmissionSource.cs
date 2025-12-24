@@ -14,6 +14,19 @@ public class VehicleFlowEmissionSource
     [Key]
     public int Id { get; set; }
     
+    /// <summary>
+    /// Идентификатор города
+    /// </summary>
+    public int CityId { get; set; }
+    
+    /// <summary>
+    /// Город
+    /// </summary>
+    public City City { get; set; } = null!;
+
+    /// <summary>
+    /// Список координат
+    /// </summary>
     public List<Coordinates> Points { get; set; } = null!;
 
     /// <summary>

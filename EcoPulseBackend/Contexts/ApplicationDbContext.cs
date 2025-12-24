@@ -15,6 +15,8 @@ public class ApplicationDbContext : DbContext
     public virtual DbSet<TrafficLightQueueEmissionSource> TrafficLightQueueEmissionSources { get; set; } = null!;
     public virtual DbSet<VehicleGroupQueue> VehicleGroupQueues { get; set; } = null!;
     
+    public virtual DbSet<City> Cities { get; set; } = null!;
+    
     public ApplicationDbContext() {  }
     
     public ApplicationDbContext(DbContextOptions options) : base(options)
@@ -43,6 +45,15 @@ public class ApplicationDbContext : DbContext
 
         
         builder.Entity<TrafficLightQueueEmissionSource>()
+            .OwnsOne(
+                e => e.Location,
+                cb =>
+                {
+                    cb.Property(c => c.Lon).HasColumnName("Lon");
+                    cb.Property(c => c.Lat).HasColumnName("Lat");
+                });
+        
+        builder.Entity<City>()
             .OwnsOne(
                 e => e.Location,
                 cb =>

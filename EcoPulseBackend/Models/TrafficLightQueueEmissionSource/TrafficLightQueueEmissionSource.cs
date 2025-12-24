@@ -13,6 +13,16 @@ public class TrafficLightQueueEmissionSource
     public int Id { get; set; }
     
     /// <summary>
+    /// Идентификатор города
+    /// </summary>
+    public int CityId { get; set; }
+    
+    /// <summary>
+    /// Город
+    /// </summary>
+    public City City { get; set; } = null!;
+    
+    /// <summary>
     /// Начальные координаты
     /// </summary>
     public Coordinates Location { get; set; } = null!;
