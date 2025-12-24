@@ -10,7 +10,7 @@ namespace EcoPulseBackend.Services;
 
 public class VehicleFlowService : IVehicleFlowService
 {
-    public List<EmissionsResult> CalculateVehicleFlowEmissionsBatch(VehicleFlowEmissionsCalculateModel model)
+    public List<EmissionsResult> CalculateEmissionsBatch(VehicleFlowEmissionsCalculateModel model)
     {
         var pollutants = new List<Pollutant>
         {
@@ -21,7 +21,7 @@ public class VehicleFlowService : IVehicleFlowService
         return pollutants.OrderBy(p => (int)p).Select(pollutant => CalculateVehicleFlowEmissions(pollutant, model)).OfType<EmissionsResult>().ToList();
     }
     
-    public List<VehicleFlowDangerZone> CalculateVehicleFlowEmissionDangerZones(List<VehicleFlowEmissionSource> emissionSources)
+    public List<VehicleFlowDangerZone> CalculateDangerZones(List<VehicleFlowEmissionSource> emissionSources)
     {
         var result = new List<VehicleFlowDangerZone>();
         

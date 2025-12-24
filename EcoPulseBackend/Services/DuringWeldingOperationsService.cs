@@ -7,7 +7,7 @@ namespace EcoPulseBackend.Services;
 
 public class DuringWeldingOperationsService : IDuringWeldingOperationsService
 {
-    public DuringWeldingOperationsEmissionsBatchResult CalculateDuringWeldingOperationsEmissionsBatch(DuringWeldingOperationsEmissionsCalculateModel model)
+    public DuringWeldingOperationsEmissionsBatchResult CalculateEmissionsBatch(DuringWeldingOperationsEmissionsCalculateModel model)
     {
         var pollutants = new List<Pollutant> { Pollutant.Fe2O3, Pollutant.MnO2, Pollutant.FluorideGases };
         

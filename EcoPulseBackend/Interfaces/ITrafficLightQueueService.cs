@@ -5,14 +5,22 @@ using EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
 
 namespace EcoPulseBackend.Interfaces;
 
+/// <summary>
+/// Сервис стоящего транспорта на регулируемом перекрестке
+/// </summary>
 public interface ITrafficLightQueueService
 {
     /// <summary>
-    /// Расчет выбросов автотранспорта в районе регулируемого перекрестка
+    /// Расчет выбросов по группе загрязнителей
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов автотранспорта в районе регулируемого перекрестка</param>
+    /// <param name="model">Модель для расчета выбросов стоящего транспорта на регулируемом перекрестке</param>
     /// <returns></returns>
-    public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(TrafficLightQueueEmissionsCalculateModel model);
+    public List<EmissionsResult> CalculateEmissionsBatch(TrafficLightQueueEmissionsCalculateModel model);
     
-    public List<TrafficLightQueueDangerZone> CalculateTrafficLightQueueEmissionDangerZones(List<TrafficLightQueueEmissionSource> emissionSources);
+    /// <summary>
+    /// Расчет нескольких зон выбросов
+    /// </summary>
+    /// <param name="emissionSources">Список источников выбросов</param>
+    /// <returns></returns>
+    public List<TrafficLightQueueDangerZone> CalculateDangerZones(List<TrafficLightQueueEmissionSource> emissionSources);
 }

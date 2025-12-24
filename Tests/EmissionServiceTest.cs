@@ -73,7 +73,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.GasolineGeneratorService.CalculateGasolineGeneratorEmissionsBatch(model);
+        var actualResult = _service.GasolineGeneratorService.CalculateEmissionsBatch(model);
 
         // Assert
         Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
@@ -128,7 +128,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.ReservoirsService.CalculateReservoirsEmissionsBatch(model);
+        var actualResult = _service.ReservoirsService.CalculateEmissionsBatch(model);
         
         // Assert
         Assert.Multiple(() =>
@@ -175,7 +175,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.DuringMetalMachiningService.CalculateDuringMetalMachiningEmissionsBatch(model);
+        var actualResult = _service.DuringMetalMachiningService.CalculateEmissionsBatch(model);
         
         // Assert
         Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
@@ -231,7 +231,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.DuringWeldingOperationsService.CalculateDuringWeldingOperationsEmissionsBatch(model);
+        var actualResult = _service.DuringWeldingOperationsService.CalculateEmissionsBatch(model);
         
         // Assert
         Assert.Multiple(() =>
@@ -294,7 +294,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.MaximumSingleService.CalculateMaximumSingleEmissions(model);
+        var actualResult = _service.MaximumSingleService.CalculateEmissions(model);
 
         // Assert
         Assert.That(actualResult.Emissions, Has.Count.EqualTo(expectedResult.Emissions.Count));
@@ -369,7 +369,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.VehicleFlowService.CalculateVehicleFlowEmissionsBatch(model);
+        var actualResult = _service.VehicleFlowService.CalculateEmissionsBatch(model);
 
         // Assert
         Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
@@ -445,7 +445,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.TrafficLightQueueService.CalculateTrafficLightQueueEmissionsBatch(model);
+        var actualResult = _service.TrafficLightQueueService.CalculateEmissionsBatch(model);
 
         // Assert
         Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
@@ -489,7 +489,7 @@ public class Tests
         };
 
         // Act
-        var actualResult = _service.OpenCoalWarehouseService.CalculateOpenCoalWarehouseEmissions(model);
+        var actualResult = _service.OpenCoalWarehouseService.CalculateEmissions(model);
 
         // Assert
         Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));

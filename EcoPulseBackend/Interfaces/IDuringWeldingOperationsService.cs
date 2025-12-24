@@ -2,12 +2,15 @@
 
 namespace EcoPulseBackend.Interfaces;
 
+/// <summary>
+/// Сервис сварочных работ
+/// </summary>
 public interface IDuringWeldingOperationsService
 {
     /// <summary>
-    /// Расчет выбросов загрязняющих веществ при сварочных работах
+    /// Расчет выбросов по группе загрязнителей
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ при сварочных работах</param>
+    /// <param name="model">Модель для расчета выбросов при сварочных работах</param>
     /// <returns></returns>
-    public DuringWeldingOperationsEmissionsBatchResult CalculateDuringWeldingOperationsEmissionsBatch(DuringWeldingOperationsEmissionsCalculateModel model);
+    public DuringWeldingOperationsEmissionsBatchResult CalculateEmissionsBatch(DuringWeldingOperationsEmissionsCalculateModel model);
 }

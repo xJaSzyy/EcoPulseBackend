@@ -40,7 +40,7 @@ public class MaximumSingleService : IMaximumSingleService
         _effectiveBuoyancy = 800f * (float)Math.Pow(_velocityRatio, 3);
     }
     
-    public EmissionsGroupResult CalculateMaximumSingleEmissions(MaximumSingleEmissionsCalculateModel model)
+    public EmissionsGroupResult CalculateEmissions(MaximumSingleEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == model.Pollutant);
 
@@ -76,7 +76,7 @@ public class MaximumSingleService : IMaximumSingleService
         return result;
     }
     
-    public SingleDangerZone CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model)
+    public SingleDangerZone CalculateDangerZone(MaximumSingleEmissionsCalculateModel model)
     {
         var pollutantInfo = DataStorage.PollutantInfos.First(i => i.Pollutant == model.Pollutant);
 

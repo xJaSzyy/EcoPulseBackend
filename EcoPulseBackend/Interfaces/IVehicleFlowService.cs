@@ -5,14 +5,22 @@ using EcoPulseBackend.Models.VehicleFlowEmissionSource;
 
 namespace EcoPulseBackend.Interfaces;
 
+/// <summary>
+/// Сервис движущегося транспорта
+/// </summary>
 public interface IVehicleFlowService
 {
     /// <summary>
-    /// Расчет выбросов движущегося автотранспорта
+    /// Расчет выбросов по группе загрязнителей
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов движущегося автотранспорта</param>
+    /// <param name="model">Модель для расчета выбросов движущегося транспорта</param>
     /// <returns></returns>
-    public List<EmissionsResult> CalculateVehicleFlowEmissionsBatch(VehicleFlowEmissionsCalculateModel model);
+    public List<EmissionsResult> CalculateEmissionsBatch(VehicleFlowEmissionsCalculateModel model);
     
-    public List<VehicleFlowDangerZone> CalculateVehicleFlowEmissionDangerZones(List<VehicleFlowEmissionSource> emissionSources);
+    /// <summary>
+    /// Расчет нескольких зон выбросов
+    /// </summary>
+    /// <param name="emissionSources">Список источников выбросов</param>
+    /// <returns></returns>
+    public List<VehicleFlowDangerZone> CalculateDangerZones(List<VehicleFlowEmissionSource> emissionSources);
 }

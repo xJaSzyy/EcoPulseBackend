@@ -3,11 +3,14 @@ using EcoPulseBackend.Models.GasolineGenerator;
 
 namespace EcoPulseBackend.Interfaces;
 
+/// <summary>
+/// Сервис бензогенератора
+/// </summary>
 public interface IGasolineGeneratorService
 {
     /// <summary>
-    /// Расчет выбросов загрязняющих веществ от бензогенератора
+    /// Расчет выбросов по группе загрязнителей
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ от бензогенератора</param>
-    public List<EmissionsResult> CalculateGasolineGeneratorEmissionsBatch(GasolineGeneratorEmissionsCalculateModel model);
+    /// <param name="model">Модель для расчета выбросов от бензогенератора</param>
+    public List<EmissionsResult> CalculateEmissionsBatch(GasolineGeneratorEmissionsCalculateModel model);
 }

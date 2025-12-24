@@ -7,7 +7,7 @@ namespace EcoPulseBackend.Services;
 
 public class OpenCoalWarehouseService : IOpenCoalWarehouseService
 {
-    public List<EmissionsResult> CalculateOpenCoalWarehouseEmissions(OpenCoalWarehouseEmissionsCalculateModel model)
+    public List<EmissionsResult> CalculateEmissions(OpenCoalWarehouseEmissionsCalculateModel model)
     {
         // Расчет пылевыделения при перегрузочных работах (п. 6.3)									
         const float humidityFactor = 0.7f;

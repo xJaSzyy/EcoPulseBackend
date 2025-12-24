@@ -9,7 +9,7 @@ namespace EcoPulseBackend.Services;
 
 public class TrafficLightQueueService : ITrafficLightQueueService
 {
-    public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(TrafficLightQueueEmissionsCalculateModel model)
+    public List<EmissionsResult> CalculateEmissionsBatch(TrafficLightQueueEmissionsCalculateModel model)
     {
         var pollutants = new List<Pollutant>
         {
@@ -20,7 +20,7 @@ public class TrafficLightQueueService : ITrafficLightQueueService
         return pollutants.OrderBy(p => (int)p).Select(pollutant => CalculateTrafficLightQueueEmissions(pollutant, model)).OfType<EmissionsResult>().ToList();
     }
     
-    public List<TrafficLightQueueDangerZone> CalculateTrafficLightQueueEmissionDangerZones(List<TrafficLightQueueEmissionSource> emissionSources)
+    public List<TrafficLightQueueDangerZone> CalculateDangerZones(List<TrafficLightQueueEmissionSource> emissionSources)
     {
         var result = new List<TrafficLightQueueDangerZone>();
         

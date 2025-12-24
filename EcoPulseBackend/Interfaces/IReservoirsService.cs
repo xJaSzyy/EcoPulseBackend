@@ -2,12 +2,15 @@
 
 namespace EcoPulseBackend.Interfaces;
 
+/// <summary>
+/// Сервис резервуаров
+/// </summary>
 public interface IReservoirsService
 {
     /// <summary>
-    /// Расчет выбросов загрязняющих веществ от резервуаров
+    /// Расчет выбросов по группе загрязнителей
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ от резервуаров</param>
+    /// <param name="model">Модель для расчета выбросов от резервуаров</param>
     /// <returns></returns>
-    public ReservoirsEmissionsBatchResult CalculateReservoirsEmissionsBatch(ReservoirsEmissionsCalculateModel model);
+    public ReservoirsEmissionsBatchResult CalculateEmissionsBatch(ReservoirsEmissionsCalculateModel model);
 }

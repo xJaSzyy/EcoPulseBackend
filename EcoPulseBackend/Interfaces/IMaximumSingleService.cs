@@ -4,19 +4,22 @@ using EcoPulseBackend.Models.MaximumSingle;
 
 namespace EcoPulseBackend.Interfaces;
 
+/// <summary>
+/// Сервис одиночного точечного источника
+/// </summary>
 public interface IMaximumSingleService
 {
     /// <summary>
-    /// Расчет выбросов загрязняющих вещество от одиночного точечного источника
+    /// Расчет выбросов по одному загрязнителю
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника</param>
+    /// <param name="model">Модель для расчета выбросов от одиночного точечного источника</param>
     /// <returns></returns>
-    public EmissionsGroupResult CalculateMaximumSingleEmissions(MaximumSingleEmissionsCalculateModel model);
+    public EmissionsGroupResult CalculateEmissions(MaximumSingleEmissionsCalculateModel model);
     
     /// <summary>
-    /// Расчет зоны выброса от одиночного точечного источника
+    /// Расчет зоны выброса
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника</param>
+    /// <param name="model">Модель для расчета выбросов от одиночного точечного источника</param>
     /// <returns></returns>
-    public SingleDangerZone CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model);
+    public SingleDangerZone CalculateDangerZone(MaximumSingleEmissionsCalculateModel model);
 }

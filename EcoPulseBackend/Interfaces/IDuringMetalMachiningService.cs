@@ -3,12 +3,15 @@ using EcoPulseBackend.Models.DuringMetalMachining;
 
 namespace EcoPulseBackend.Interfaces;
 
+/// <summary>
+/// Сервис механической обработки металлов
+/// </summary>
 public interface IDuringMetalMachiningService
 {
     /// <summary>
-    /// Расчет выбросов загрязняющих веществ при механической обработке металлов
+    /// Расчет выбросов по группе загрязнителей
     /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ при механической обработке металлов</param>
+    /// <param name="model">Модель для расчета выбросов при механической обработке металлов</param>
     /// <returns></returns>
-    public List<EmissionsResult> CalculateDuringMetalMachiningEmissionsBatch(DuringMetalMachiningEmissionsCalculateModel model);
+    public List<EmissionsResult> CalculateEmissionsBatch(DuringMetalMachiningEmissionsCalculateModel model);
 }

@@ -7,7 +7,7 @@ namespace EcoPulseBackend.Services;
 
 public class ReservoirsService : IReservoirsService
 {
-    public ReservoirsEmissionsBatchResult CalculateReservoirsEmissionsBatch(ReservoirsEmissionsCalculateModel model)
+    public ReservoirsEmissionsBatchResult CalculateEmissionsBatch(ReservoirsEmissionsCalculateModel model)
     {
         var pollutants = new List<Pollutant> { Pollutant.RPK240280, Pollutant.H2S };
         

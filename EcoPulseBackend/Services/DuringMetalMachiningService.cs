@@ -7,7 +7,7 @@ namespace EcoPulseBackend.Services;
 
 public class DuringMetalMachiningService : IDuringMetalMachiningService
 {
-    public List<EmissionsResult> CalculateDuringMetalMachiningEmissionsBatch(DuringMetalMachiningEmissionsCalculateModel model)
+    public List<EmissionsResult> CalculateEmissionsBatch(DuringMetalMachiningEmissionsCalculateModel model)
     {
         var pollutants = new List<Pollutant> { Pollutant.Fe2O3 };
 

@@ -7,7 +7,7 @@ namespace EcoPulseBackend.Services;
 
 public class GasolineGeneratorService : IGasolineGeneratorService
 {
-    public List<EmissionsResult> CalculateGasolineGeneratorEmissionsBatch(GasolineGeneratorEmissionsCalculateModel model)
+    public List<EmissionsResult> CalculateEmissionsBatch(GasolineGeneratorEmissionsCalculateModel model)
     {
         var pollutants = new List<Pollutant> { Pollutant.CO, Pollutant.CH, Pollutant.NO2, Pollutant.NO, Pollutant.SO2 };
         
