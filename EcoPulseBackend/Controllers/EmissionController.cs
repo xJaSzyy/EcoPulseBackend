@@ -25,19 +25,19 @@ public class EmissionController : ControllerBase
         _dbContext = dbContext;
         _logger = logger;
     }
-    
+
     [HttpPost("emission/gasoline-generator")]
     public IActionResult CalculateGasolineGenerator([FromBody] GasolineGeneratorEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateGasolineGeneratorEmissionsBatch(model);
+        var result = _emissionService.GasolineGeneratorService.CalculateGasolineGeneratorEmissionsBatch(model);
 
         return Ok(result);
     }
-    
+
     [HttpPost("emission/reservoirs")]
     public IActionResult CalculateReservoirs([FromBody] ReservoirsEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateReservoirsEmissionsBatch(model);
+        var result = _emissionService.ReservoirsService.CalculateReservoirsEmissionsBatch(model);
 
         return Ok(result.Emissions);
     }
@@ -45,7 +45,7 @@ public class EmissionController : ControllerBase
     [HttpPost("emission/during-metal-machining")]
     public IActionResult CalculateDuringMetalMachining([FromBody] DuringMetalMachiningEmissionsCalculateModel model)
     { 
-        var result = _emissionService.CalculateDuringMetalMachiningEmissionsBatch(model);
+        var result = _emissionService.DuringMetalMachiningService.CalculateDuringMetalMachiningEmissionsBatch(model);
 
         return Ok(result);
     }
@@ -53,7 +53,7 @@ public class EmissionController : ControllerBase
     [HttpPost("emission/during-welding-operations")]
     public IActionResult CalculateDuringWeldingOperations([FromBody] DuringWeldingOperationsEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateDuringWeldingOperationsEmissionsBatch(model);
+        var result = _emissionService.DuringWeldingOperationsService.CalculateDuringWeldingOperationsEmissionsBatch(model);
 
         return Ok(result.Emissions);
     }
@@ -61,7 +61,7 @@ public class EmissionController : ControllerBase
     [HttpPost("emission/maximum-single")]
     public IActionResult CalculateMaximumSingleEmissions([FromBody] MaximumSingleEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateMaximumSingleEmissions(model);
+        var result = _emissionService.MaximumSingleService.CalculateMaximumSingleEmissions(model);
 
         return Ok(result);
     }
@@ -69,7 +69,7 @@ public class EmissionController : ControllerBase
     [HttpPost("emission/vehicle-flow")]
     public IActionResult CalculateVehicleFlowEmissions([FromBody] VehicleFlowEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateVehicleFlowEmissionsBatch(model);
+        var result = _emissionService.VehicleFlowService.CalculateVehicleFlowEmissionsBatch(model);
 
         return Ok(result);
     }
@@ -77,7 +77,7 @@ public class EmissionController : ControllerBase
     [HttpPost("emission/traffic-light-queue")]
     public IActionResult CalculateTrafficLightQueueEmissions([FromBody] TrafficLightQueueEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateTrafficLightQueueEmissionsBatch(model);
+        var result = _emissionService.TrafficLightQueueService.CalculateTrafficLightQueueEmissionsBatch(model);
 
         return Ok(result);
     }
@@ -85,7 +85,7 @@ public class EmissionController : ControllerBase
     [HttpPost("emission/open-coal-warehouse")]
     public IActionResult CalculateOpenCoalWarehouseEmissions([FromBody] OpenCoalWarehouseEmissionsCalculateModel model)
     {
-        var result = _emissionService.CalculateOpenCoalWarehouseEmissions(model);
+        var result = _emissionService.OpenCoalWarehouseService.CalculateOpenCoalWarehouseEmissions(model);
 
         return Ok(result);
     }

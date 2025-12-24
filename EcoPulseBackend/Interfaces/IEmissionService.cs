@@ -1,85 +1,20 @@
-using EcoPulseBackend.Enums;
-using EcoPulseBackend.Models;
-using EcoPulseBackend.Models.DangerZone;
-using EcoPulseBackend.Models.DuringMetalMachining;
-using EcoPulseBackend.Models.DuringWeldingOperations;
-using EcoPulseBackend.Models.GasolineGenerator;
-using EcoPulseBackend.Models.MaximumSingle;
-using EcoPulseBackend.Models.OpenCoalWarehouse;
-using EcoPulseBackend.Models.Reservoirs;
-using EcoPulseBackend.Models.TrafficLightQueue;
-using EcoPulseBackend.Models.TrafficLightQueueEmissionSource;
-using EcoPulseBackend.Models.VehicleFlow;
-using EcoPulseBackend.Models.VehicleFlowEmissionSource;
-
 namespace EcoPulseBackend.Interfaces;
 
 public interface IEmissionService
 {
-    /// <summary>
-    /// Расчет выбросов загрязняющих веществ от бензогенератора
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ от бензогенератора</param>
-    public List<EmissionsResult> CalculateGasolineGeneratorEmissionsBatch(GasolineGeneratorEmissionsCalculateModel model);
+    public IGasolineGeneratorService GasolineGeneratorService { get; }
 
-    /// <summary>
-    /// Расчет выбросов загрязняющих веществ от резервуаров
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ от резервуаров</param>
-    /// <returns></returns>
-    public ReservoirsEmissionsBatchResult CalculateReservoirsEmissionsBatch(ReservoirsEmissionsCalculateModel model);
+    public IReservoirsService ReservoirsService { get; }
 
-    /// <summary>
-    /// Расчет выбросов загрязняющих веществ при механической обработке металлов
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ при механической обработке металлов</param>
-    /// <returns></returns>
-    public List<EmissionsResult> CalculateDuringMetalMachiningEmissionsBatch(DuringMetalMachiningEmissionsCalculateModel model);
+    public IDuringMetalMachiningService DuringMetalMachiningService { get; }
 
-    /// <summary>
-    /// Расчет выбросов загрязняющих веществ при сварочных работах
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих веществ при сварочных работах</param>
-    /// <returns></returns>
-    public DuringWeldingOperationsEmissionsBatchResult CalculateDuringWeldingOperationsEmissionsBatch(DuringWeldingOperationsEmissionsCalculateModel model);
+    public IDuringWeldingOperationsService DuringWeldingOperationsService { get; }
 
-    /// <summary>
-    /// Расчет выбросов загрязняющих вещество от одиночного точечного источника
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника</param>
-    /// <returns></returns>
-    public EmissionsGroupResult CalculateMaximumSingleEmissions(MaximumSingleEmissionsCalculateModel model);
+    public IMaximumSingleService MaximumSingleService { get; }
 
-    /// <summary>
-    /// Расчет выбросов движущегося автотранспорта
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов движущегося автотранспорта</param>
-    /// <returns></returns>
-    public List<EmissionsResult> CalculateVehicleFlowEmissionsBatch(VehicleFlowEmissionsCalculateModel model);
+    public IVehicleFlowService VehicleFlowService { get; }
 
-    /// <summary>
-    /// Расчет выбросов автотранспорта в районе регулируемого перекрестка
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов автотранспорта в районе регулируемого перекрестка</param>
-    /// <returns></returns>
-    public List<EmissionsResult> CalculateTrafficLightQueueEmissionsBatch(TrafficLightQueueEmissionsCalculateModel model);
+    public ITrafficLightQueueService TrafficLightQueueService { get; }
 
-
-    /// <summary>
-    /// Расчет выбросов угольной пыли в атмосферу от открытых складов угля
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов угольной пыли в атмосферу от открытых складов угля</param>
-    /// <returns></returns>
-    public List<EmissionsResult> CalculateOpenCoalWarehouseEmissions(OpenCoalWarehouseEmissionsCalculateModel model);
-
-    /// <summary>
-    /// Расчет зоны выброса от одиночного точечного источника
-    /// </summary>
-    /// <param name="model">Модель для расчета выбросов загрязняющих вещество от одиночного точечного источника</param>
-    /// <returns></returns>
-    public SingleDangerZone CalculateMaximumSingleEmissionsDangerZone(MaximumSingleEmissionsCalculateModel model);
-
-    public List<VehicleFlowDangerZone> CalculateVehicleFlowEmissionDangerZones(List<VehicleFlowEmissionSource> emissionSources);
-    
-    public List<TrafficLightQueueDangerZone> CalculateTrafficLightQueueEmissionDangerZones(List<TrafficLightQueueEmissionSource> emissionSources);
+    public IOpenCoalWarehouseService OpenCoalWarehouseService { get; }
 }
