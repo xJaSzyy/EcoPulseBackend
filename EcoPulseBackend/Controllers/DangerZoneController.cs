@@ -30,7 +30,9 @@ public class DangerZoneController : ControllerBase
     [HttpPost("danger-zones/single")]
     public IActionResult CalculateSingleDangerZones([FromBody] SingleDangerZoneCalculateModel model)
     {
-        var emissionSources = _dbContext.SingleEmissionSources.ToList();
+        var emissionSources = _dbContext.SingleEmissionSources
+            .Where(s => model.CityIds.Contains(s.CityId))
+            .ToList();
 
         var result = new List<SingleDangerZone>();
         
@@ -75,9 +77,10 @@ public class DangerZoneController : ControllerBase
     }
     
     [HttpPost("danger-zones/traffic-light-queue")]
-    public IActionResult CalculateTrafficLightQueueDangerZones()
+    public IActionResult CalculateTrafficLightQueueDangerZones(TrafficLightQueueDangerZoneCalculateModel model)
     {
         var emissionSources = _dbContext.TrafficLightQueueEmissionSources
+            .Where(s => model.CityIds.Contains(s.CityId))
             .Include(s => s.VehicleGroups)
             .ToList();
 

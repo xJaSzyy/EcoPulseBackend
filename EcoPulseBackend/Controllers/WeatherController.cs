@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Security.Authentication;
 using System.Text.Json;
 using EcoPulseBackend.Models.Weather;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ public class WeatherController : ControllerBase
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> GetCurrentWeather([FromQuery] string city)
     {
-        var httpClient = _httpClientFactory.CreateClient();
+        var httpClient = _httpClientFactory.CreateClient("weather");
 
         var weatherUrl =
             "https://api.open-meteo.com/v1/forecast?latitude=55.355198&longitude=86.086847&current_weather=true";

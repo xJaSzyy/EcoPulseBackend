@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using EcoPulseBackend;
 using EcoPulseBackend.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,12 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
+
+builder.Services.AddHttpClient("weather")
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13
+    });
 
 var app = builder.Build();
 

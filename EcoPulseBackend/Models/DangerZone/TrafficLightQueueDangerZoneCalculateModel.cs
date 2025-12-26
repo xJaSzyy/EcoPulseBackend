@@ -1,6 +1,6 @@
 ﻿namespace EcoPulseBackend.Models.DangerZone;
 
-public class VehicleFlowDangerZoneCalculateModel
+public class TrafficLightQueueDangerZoneCalculateModel
 {
     /// <summary>
     /// Список идентификаторов городов
