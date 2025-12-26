@@ -4,6 +4,14 @@ namespace EcoPulseBackend.Models.VehicleFlowEmissionSource;
 
 public class VehicleFlowEmissionSourceAddModel
 {
+    /// <summary>
+    /// Идентификатор города
+    /// </summary>
+    public int CityId { get; set; }
+    
+    /// <summary>
+    /// Список координат
+    /// </summary>
     public List<Coordinates> Points { get; set; } = null!;
     
     /// <summary>

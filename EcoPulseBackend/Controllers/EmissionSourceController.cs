@@ -103,6 +103,7 @@ public class EmissionSourceController : ControllerBase
     {
         var emissionSource = new VehicleFlowEmissionSource
         {
+            CityId = model.CityId,
             Points  = model.Points,
             VehicleType = model.VehicleType,
             MaxTrafficIntensity = model.MaxTrafficIntensity,

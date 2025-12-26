@@ -63,9 +63,11 @@ public class DangerZoneController : ControllerBase
     }
     
     [HttpPost("danger-zones/vehicle-flow")]
-    public IActionResult CalculateVehicleFlowDangerZones()
+    public IActionResult CalculateVehicleFlowDangerZones([FromBody] VehicleFlowDangerZoneCalculateModel model)
     {
-        var emissionSources = _dbContext.VehicleFlowEmissionSources.ToList();
+        var emissionSources = _dbContext.VehicleFlowEmissionSources
+            .Where(s => model.CityIds.Contains(s.CityId))
+            .ToList();
 
         var result = _emissionService.VehicleFlowService.CalculateDangerZones(emissionSources);
 
