@@ -23,6 +23,11 @@ public class VehicleFlowEmissionSource
     /// Город
     /// </summary>
     public City City { get; set; } = null!;
+    
+    /// <summary>
+    /// Название улицы
+    /// </summary>
+    public string StreetName { get; set; } = null!;
 
     /// <summary>
     /// Список координат

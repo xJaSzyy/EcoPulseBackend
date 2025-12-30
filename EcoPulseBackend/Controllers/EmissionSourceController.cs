@@ -143,6 +143,7 @@ public class EmissionSourceController : ControllerBase
         emissionSource.VehicleType = model.VehicleType ?? emissionSource.VehicleType;
         emissionSource.MaxTrafficIntensity = model.MaxTrafficIntensity ?? emissionSource.MaxTrafficIntensity;
         emissionSource.AverageSpeed = model.AverageSpeed ?? emissionSource.AverageSpeed;
+        emissionSource.StreetName = model.StreetName ?? emissionSource.StreetName;
         
         _dbContext.VehicleFlowEmissionSources.Update(emissionSource);
         await _dbContext.SaveChangesAsync();
