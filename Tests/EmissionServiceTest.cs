@@ -166,7 +166,7 @@ public class Tests
 
         var expectedResult = new List<EmissionsResult>
         {
-            new EmissionsResult
+            new()
             {
                 PollutantInfo = new PollutantInfo { Pollutant = Pollutant.Fe2O3 },
                 MaximumEmission = maximumEmission,

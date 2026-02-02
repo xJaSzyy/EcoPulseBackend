@@ -36,7 +36,7 @@ public class OpenCoalWarehouseEmissionsCalculateModel
     public int SnowyDaysCount { get; set; }
     
     /// <summary>
-    /// Количество дней  с осадками в виде дождя
+    /// Количество дней с осадками в виде дождя
     /// </summary>
     public int RainyDaysCount { get; set; } 
 }

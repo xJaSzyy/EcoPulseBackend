@@ -12,8 +12,8 @@ services:
       - "5000:5000"
     environment:
       ASPNETCORE_URLS: http://+:5000
-      ASPNETCORE_ENVIRONMENT: ${ENV}
       ConnectionStrings__DefaultConnection: ${CONNECTION_STRING}
+      OllamaUrl: "http://ollama:11434/api/chat"
     networks:
       - test
   
@@ -31,6 +31,17 @@ services:
       - "5433:5432"
     networks:
       - test
+  
+  ollama:
+    container_name: ecopulse_ollama
+    image: ollama/ollama:0.3.12
+    restart: always
+    ports:
+      - "11435:11434"  
+    volumes:
+      - ollama_data:/root/.ollama  
+    networks:
+      - test
 
 networks:
   test:
@@ -38,3 +49,4 @@ networks:
 
 volumes:
   db_data:
+  ollama_data:

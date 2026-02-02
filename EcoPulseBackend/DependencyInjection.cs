@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IOpenCoalWarehouseService, OpenCoalWarehouseService>();
         services.AddScoped<IEmissionService, EmissionService>();
         services.AddScoped<IExportService, ExportService>();
+        services.AddScoped<IRecommendationService, RecommendationService>();
     }
 
     public static void AddDatabase(this IServiceCollection services, ConfigurationManager configuration)
