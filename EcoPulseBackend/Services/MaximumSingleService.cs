@@ -136,9 +136,10 @@ public class MaximumSingleService : IMaximumSingleService
             }
         }
 
-        const int windAverageSpeed = 3;
+        const float windAverageSpeed = 3f;
 
         var windSpeedCoeff =  windSpeed != 0  ? windAverageSpeed / windSpeed : windAverageSpeed;
+        windSpeedCoeff /= 2.1f;
         
         var dangerZoneLength = (minDistance / Math.Sqrt(Math.Sqrt(mass))) * (1 / windSpeedCoeff);
         var dangerZoneWidth = Math.Round((minDistance - maxDistance) * 2 * windSpeedCoeff, 2) * Math.Sqrt(mass);

@@ -29,11 +29,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod());
 });
 
-builder.Services.AddHttpClient("weather")
-    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-    {
-        SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13
-    });
+builder.Services.AddHttpClient("weather");
 
 var app = builder.Build();
 
